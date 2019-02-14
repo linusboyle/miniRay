@@ -1,6 +1,6 @@
 #include <cstdio>
 #define SVPNG_OUTPUT FILE* fp
-#include "../svpng.inc"
+#include "svpng.inc"
 
 #include "image.hpp"
 #include <cstring>

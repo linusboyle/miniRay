@@ -35,6 +35,9 @@ namespace graphics {
         ImagePlane imagePlane() const {
             return plane;
         }
+        Point source() const {
+            return viewpoint;
+        }
 
         Ray genRay(coordinate_type u_coordinate, coordinate_type v_coordinate) const;
     };

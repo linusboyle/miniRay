@@ -7,7 +7,7 @@
 #include <limits>
 
 namespace graphics {
-    void Scene::render(const Camera& camera, const Image& img) const {
+    void Scene::render(const Camera& camera, Image& img) const {
         auto plane = camera.imagePlane();
         const coordinate_type pWidth = plane.right_bound - plane.left_bound;
         const coordinate_type pHeight = plane.top_bound - plane.bottom_bound;
@@ -22,7 +22,7 @@ namespace graphics {
                 Ray ray = camera.genRay(u, v);
                 
                 Surface* hitObj = nullptr;
-                HitPoint hitPosition = {std::numeric_limits<coordinate_type>::max(), Vector3{}};
+                HitPoint hitPosition = {std::numeric_limits<coordinate_type>::max(), Vector3{0, 0, 0}};
 
                 std::for_each(std::begin(objects), std::end(objects), 
                         [&ray, &hitPosition, &hitObj](Surface* obj) { 
@@ -38,8 +38,13 @@ namespace graphics {
                 
                 if (hitObj) {
                     // begin shading
+                    Point p = ray.source() + hitPosition.offset * ray.direction();
 
-
+                    // simple lambertian shading
+                    for (auto light : lights) {
+                        RGBColor pColor = std::max(0.0, scalarProduct(hitPosition.normal,normalize(light.position - p))) * light.intensity * hitObj->color();
+                        img.setpixel(i, j, pColor);
+                    }
                 }
             }
         }

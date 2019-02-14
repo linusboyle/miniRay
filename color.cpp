@@ -28,4 +28,18 @@ namespace graphics {
 
         return {static_cast<unsigned char>(R), static_cast<unsigned char>(G), static_cast<unsigned char>(B)};
     }
+
+    RGBColor operator*(coordinate_type lhs, const RGBColor& rhs) {
+        coordinate_type R = lhs * static_cast<coordinate_type>(rhs.R);
+        if (R > 255)
+            R = 255;
+        coordinate_type G = lhs * static_cast<coordinate_type>(rhs.G);
+        if (G > 255)
+            G = 255;
+        coordinate_type B = lhs * static_cast<coordinate_type>(rhs.B);
+        if (B > 255)
+            B = 255;
+
+        return {static_cast<unsigned char>(R), static_cast<unsigned char>(G), static_cast<unsigned char>(B)};
+    }
 }

@@ -1,10 +1,13 @@
 #ifndef SURFACE_CPP
 #define SURFACE_CPP
 
-#include <optional>
 #include "vector.hpp"
+#include "color.hpp"
+
+#include <optional>
 
 namespace graphics {
+
     class Ray;
 
     struct BoundingBox {
@@ -20,7 +23,11 @@ namespace graphics {
     using intersect_type = std::optional<HitPoint>;
 
     class Surface {
+        RGBColor color_;
     public:
+        Surface(const RGBColor& color): color_(color) {}
+        RGBColor color() const { return color_; }
+
         virtual ~Surface() = 0;
         virtual intersect_type hit(const Ray& ray, coordinate_type upperbound) const = 0;   
         virtual BoundingBox boundingbox() const = 0;
@@ -32,7 +39,7 @@ namespace graphics {
 
         Vector3 gradient(const Ray& ray, coordinate_type position) const;
     public:
-        Sphere(Point center, coordinate_type radius): center_(center), radius_(radius) {}
+        Sphere(Point center, coordinate_type radius, RGBColor color): Surface(color), center_(center), radius_(radius) {}
         virtual intersect_type hit(const Ray& ray, coordinate_type upperbound) const;   
         virtual BoundingBox boundingbox() const;
         virtual ~Sphere() {}

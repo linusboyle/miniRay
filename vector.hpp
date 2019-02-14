@@ -9,7 +9,7 @@ namespace graphics {
         coordinate_type y;
 
     public:
-        basic_vector2(coordinate_type x = 0, coordinate_type y = 0): x(x), y(y) {}
+        basic_vector2(coordinate_type x, coordinate_type y): x(x), y(y) {}
         coordinate_type getx() const {return x;}
         coordinate_type gety() const {return y;}
         coordinate_type modulus() const;
@@ -21,7 +21,7 @@ namespace graphics {
         coordinate_type z;
 
     public:
-        basic_vector3(coordinate_type x = 0, coordinate_type y = 0, coordinate_type z = 0): x(x), y(y), z(z) {}
+        basic_vector3(coordinate_type x, coordinate_type y, coordinate_type z): x(x), y(y), z(z) {}
         coordinate_type getx() const {return x;}
         coordinate_type gety() const {return y;}
         coordinate_type getz() const {return z;}

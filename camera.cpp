@@ -4,11 +4,13 @@ static const graphics::Vector3 upVector = {0, 0, 1};
 
 namespace graphics {
     Camera::Camera(const Point& viewpoint, const Vector3& view_direction, coordinate_type length, const ImagePlane& plane): 
+        u(0,0,0),
+        v(0,0,0),
+        w(-normalize(view_direction)),
         focal_length(length), 
         viewpoint(viewpoint),
         plane(plane) 
     {
-        w = -normalize(view_direction);
         u = normalize(upVector * w);
         v = w * u;
     }
