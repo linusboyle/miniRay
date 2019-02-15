@@ -2,6 +2,7 @@
 #include "camera.hpp"
 #include "image.hpp"
 #include "sphere.hpp"
+#include "plane.hpp"
 
 #include <cassert>
 #include <iostream>
@@ -36,10 +37,10 @@ int main() {
     img.fillcolor({0, 0, 0});
 
     // intersect
-    Surface* surface = new Sphere(Point{0, 0, 0}, 1.0, {100, 100, 100});
+    Surface* sphere = new Sphere(Point{0, 0, 0}, 1.0, {100, 100, 100});
     Ray ray({1, 1, 1}, {-1, -1, -1});
 
-    auto result = surface->hit(ray, 0, std::numeric_limits<coordinate_type>::max());
+    auto result = sphere->hit(ray, 0, std::numeric_limits<coordinate_type>::max());
 
     if (result) {
         coordinate_type point = result.value();
@@ -51,12 +52,13 @@ int main() {
     
     // camera / scene
     Scene s;
-    s.addObject(surface);
-    s.addLightSource({Point(2.1, -0.4, 3), 0.7});
+    s.addObject(sphere);
+    s.addObject(new Plane{Point(1, 0, -1), Point(0, 1, -1), Point(0, -1, -1), {70, 70, 70}});
+    s.addLightSource({Point(2.1, -0.3, 4), 1});
     Camera camera({5.0, 5.0, 5.0}, {-1, -1, -1}, 0.7, {-0.2, 0.2, 0.2, -0.2});
     s.render(camera, img);
 
-    img.writeout("Sphere.png");
+    img.writeout("render.png");
     
     return 0;
 }

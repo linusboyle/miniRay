@@ -40,12 +40,12 @@ namespace graphics {
                     Point p = ray.source() + hitPosition * ray.direction();
                     Vector3 normal = hitObj->gradient(p);
 
-                    RGBColor pColor{0, 0,0};
+                    RGBColor pColor{0, 0, 0};
                     for (auto light : lights) {
                         Vector3 lDirection = light.position - p;
                         pColor = pColor 
                             + ShadingPolicy::Lambertian(hitObj->color(), light.intensity, normal, lDirection) 
-                            + ShadingPolicy::BlinnPhong(hitObj->color(), light.intensity, normal, lDirection, -ray.direction(), 2);                    
+                            + ShadingPolicy::BlinnPhong(hitObj->color(), light.intensity, normal, lDirection, -ray.direction(), 10);                    
                     }
                     pColor = pColor + ShadingPolicy::Ambient(hitObj->color(), aIntensity);
 

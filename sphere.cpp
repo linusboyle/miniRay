@@ -11,7 +11,7 @@ static inline graphics::coordinate_type discriminant(graphics::coordinate_type A
 
 namespace graphics {
 
-    intersect_type Sphere::hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) const {
+    intersect_type Sphere::hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) {
 
         assert(lowerbound >= 0);
         assert(lowerbound <= upperbound);

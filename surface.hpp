@@ -24,7 +24,7 @@ namespace graphics {
         RGBColor color() const { return color_; }
 
         virtual ~Surface() = 0;
-        virtual intersect_type hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) const = 0;   
+        virtual intersect_type hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) = 0;   
         virtual BoundingBox boundingbox() const = 0;
         virtual Vector3 gradient(const Point& position) const = 0;
     };
