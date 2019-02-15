@@ -41,11 +41,12 @@ namespace graphics {
                     Point p = ray.source() + hitPosition * ray.direction();
                     Vector3 normal = hitObj->gradient(p);
 
+                    RGBColor pColor;
                     // simple lambertian shading
                     for (auto light : lights) {
-                        RGBColor pColor = std::max(0.0, scalarProduct(normal,normalize(light.position - p))) * light.intensity * hitObj->color();
-                        img.setpixel(i, j, pColor);
+                        pColor = pColor + std::max(0.0, scalarProduct(normal,normalize(light.position - p))) * light.intensity * hitObj->color();
                     }
+                    img.setpixel(i, j, pColor);
                 }
             }
         }
