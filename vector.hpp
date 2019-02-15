@@ -9,11 +9,19 @@ namespace graphics {
         coordinate_type y;
 
     public:
+        basic_vector2(): basic_vector2(0.0,0.0){}
         basic_vector2(coordinate_type x, coordinate_type y): x(x), y(y) {}
         coordinate_type getx() const {return x;}
         coordinate_type gety() const {return y;}
         coordinate_type modulus() const;
     };
+
+    basic_vector2 operator+(const basic_vector2& lhs, const basic_vector2& rhs);
+    basic_vector2 operator-(const basic_vector2& lhs, const basic_vector2& rhs);
+    basic_vector2 normalize(const basic_vector2& vec);
+    coordinate_type scalarProduct(const basic_vector2& lhs, const basic_vector2& rhs);
+
+    using Vector2 = basic_vector2;
 
     class basic_vector3 {
         coordinate_type x;
@@ -21,16 +29,13 @@ namespace graphics {
         coordinate_type z;
 
     public:
+        basic_vector3(): basic_vector3(0.0, 0.0, 0.0) {}
         basic_vector3(coordinate_type x, coordinate_type y, coordinate_type z): x(x), y(y), z(z) {}
         coordinate_type getx() const {return x;}
         coordinate_type gety() const {return y;}
         coordinate_type getz() const {return z;}
         coordinate_type modulus() const;
     };
-
-    basic_vector2 operator+(const basic_vector2& lhs, const basic_vector2& rhs);
-    basic_vector2 operator-(const basic_vector2& lhs, const basic_vector2& rhs);
-    basic_vector2 normalize(const basic_vector2& vec);
 
     basic_vector3 operator+(const basic_vector3& lhs, const basic_vector3& rhs);
 
@@ -46,12 +51,9 @@ namespace graphics {
 
     bool operator==(const basic_vector3& lhs, const basic_vector3& rhs);
 
-    coordinate_type scalarProduct(const basic_vector2& lhs, const basic_vector2& rhs);
     coordinate_type scalarProduct(const basic_vector3& lhs, const basic_vector3& rhs);
 
-    using Vector2 = basic_vector2;
     using Vector3 = basic_vector3;
-
     using Point = basic_vector3; // a 3d point can be seen as a vector
 }
 

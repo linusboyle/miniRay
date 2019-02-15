@@ -22,11 +22,11 @@ namespace graphics {
                 Ray ray = camera.genRay(u, v);
                 
                 Surface* hitObj = nullptr;
-                HitPoint hitPosition = {std::numeric_limits<coordinate_type>::max(), Vector3{0, 0, 0}};
+                coordinate_type hitPosition = std::numeric_limits<coordinate_type>::max();
 
                 std::for_each(std::begin(objects), std::end(objects), 
                         [&ray, &hitPosition, &hitObj](Surface* obj) { 
-                            auto result = obj->hit(ray, hitPosition.offset);
+                            auto result = obj->hit(ray, hitPosition);
                             if (result) {
                                 hitPosition = result.value();
                                 hitObj = obj;
@@ -38,11 +38,12 @@ namespace graphics {
                 
                 if (hitObj) {
                     // begin shading
-                    Point p = ray.source() + hitPosition.offset * ray.direction();
+                    Point p = ray.source() + hitPosition * ray.direction();
+                    Vector3 normal = hitObj->gradient(p);
 
                     // simple lambertian shading
                     for (auto light : lights) {
-                        RGBColor pColor = std::max(0.0, scalarProduct(hitPosition.normal,normalize(light.position - p))) * light.intensity * hitObj->color();
+                        RGBColor pColor = std::max(0.0, scalarProduct(normal,normalize(light.position - p))) * light.intensity * hitObj->color();
                         img.setpixel(i, j, pColor);
                     }
                 }

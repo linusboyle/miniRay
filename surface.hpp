@@ -15,12 +15,7 @@ namespace graphics {
         Point second;
     };
 
-    struct HitPoint {
-        coordinate_type offset;
-        Vector3 normal;
-    };
-
-    using intersect_type = std::optional<HitPoint>;
+    using intersect_type = std::optional<coordinate_type>;
 
     class Surface {
         RGBColor color_;
@@ -31,18 +26,9 @@ namespace graphics {
         virtual ~Surface() = 0;
         virtual intersect_type hit(const Ray& ray, coordinate_type upperbound) const = 0;   
         virtual BoundingBox boundingbox() const = 0;
+        virtual Vector3 gradient(const Point& position) const = 0;
     };
-
-    class Sphere : public Surface {
-        Point center_;
-        coordinate_type radius_;
-
-        Vector3 gradient(const Ray& ray, coordinate_type position) const;
-    public:
-        Sphere(Point center, coordinate_type radius, RGBColor color): Surface(color), center_(center), radius_(radius) {}
-        virtual intersect_type hit(const Ray& ray, coordinate_type upperbound) const;   
-        virtual BoundingBox boundingbox() const;
-        virtual ~Sphere() {}
-    };
+    
+    inline Surface::~Surface() {}
 }
 #endif /* ifndef SURFACE_CPP */

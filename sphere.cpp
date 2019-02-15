@@ -1,4 +1,4 @@
-#include "surface.hpp" 
+#include "sphere.hpp" 
 #include "ray.hpp"
 #include <cmath>
 #include <cassert>
@@ -10,7 +10,6 @@ static inline graphics::coordinate_type discriminant(graphics::coordinate_type A
 }
 
 namespace graphics {
-    Surface::~Surface() {}
 
     intersect_type Sphere::hit(const Ray& ray, coordinate_type upperbound) const {
         // coefficients
@@ -36,7 +35,7 @@ namespace graphics {
                 coordinate_type x1 = (- B / 2 - root) / A;
 
                 if (x1 <= upperbound) {
-                    return HitPoint{x1, gradient(ray, x1)};
+                    return x1;
                 } else {
                     return {};
                 }
@@ -44,7 +43,7 @@ namespace graphics {
         } else {
             coordinate_type x = (-B / 2) / A;
             if (x <= upperbound) {
-                return HitPoint{x, gradient(ray, x)};
+                return x;
             } else {
                 return {};
             }
@@ -52,9 +51,8 @@ namespace graphics {
     }
 
     // the unit surface normal
-    Vector3 Sphere::gradient(const Ray& ray, coordinate_type position) const {
-        Point p = ray.source() + position * ray.direction();
-        return (p - center_) / radius_;
+    Vector3 Sphere::gradient(const Point& position) const {
+        return (position - center_) / radius_;
     }
 
     BoundingBox Sphere::boundingbox() const {
