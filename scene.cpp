@@ -45,9 +45,11 @@ namespace graphics {
                     // simple lambertian shading
                     for (auto light : lights) {
                         Vector3 lDirection = light.position - p;
-                        pColor = pColor + ShadingPolicy::lambertian(hitObj->color(), light.intensity, normal, lDirection) + ShadingPolicy::BlinnPhong(hitObj->color(), light.intensity, normal, lDirection, -ray.direction(), 2);                    
+                        pColor = pColor 
+                            + ShadingPolicy::lambertian(hitObj->color(), light.intensity, normal, lDirection) 
+                            + ShadingPolicy::BlinnPhong(hitObj->color(), light.intensity, normal, lDirection, -ray.direction(), 2);                    
                     }
-                    pColor = pColor + ShadingPolicy::Ambient(hitObj->color(), 0.1);
+                    pColor = pColor + ShadingPolicy::Ambient(hitObj->color(), aIntensity);
 
                     img.setpixel(i, j, pColor);
                 }

@@ -17,6 +17,7 @@ namespace graphics {
     class Scene {
         std::vector<Surface*> objects;
         std::vector<LightSource> lights;
+        coordinate_type aIntensity = 0.2;
     public:
         void render(const Camera& camera, Image& img) const;
         void addObject(Surface* obj) {
@@ -24,6 +25,9 @@ namespace graphics {
         }
         void addLightSource(LightSource light) {
             lights.push_back(light);
+        }
+        void setAmbientIntensity(coordinate_type intensity) {
+            aIntensity = intensity;
         }
     };
 }
