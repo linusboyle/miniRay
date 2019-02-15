@@ -2,6 +2,7 @@
 #include "image.hpp"
 #include "camera.hpp"
 #include "surface.hpp"
+#include "shading.hpp"
 
 #include <algorithm>
 #include <limits>
@@ -24,14 +25,13 @@ namespace graphics {
                 Surface* hitObj = nullptr;
                 coordinate_type hitPosition = std::numeric_limits<coordinate_type>::max();
 
-                std::for_each(std::begin(objects), std::end(objects), 
-                        [&ray, &hitPosition, &hitObj](Surface* obj) { 
-                            auto result = obj->hit(ray, hitPosition);
-                            if (result) {
-                                hitPosition = result.value();
-                                hitObj = obj;
-                            }
-                        });
+                for (auto obj : objects) {
+                    auto result = obj->hit(ray, hitPosition);
+                    if (result) {
+                        hitPosition = result.value();
+                        hitObj = obj;
+                    }
+                }
 
                 // suppose the image has been filled with background color before render 
                 // process, so that no trouble for that here.
@@ -41,11 +41,14 @@ namespace graphics {
                     Point p = ray.source() + hitPosition * ray.direction();
                     Vector3 normal = hitObj->gradient(p);
 
-                    RGBColor pColor;
+                    RGBColor pColor{0, 0,0};
                     // simple lambertian shading
                     for (auto light : lights) {
-                        pColor = pColor + std::max(0.0, scalarProduct(normal,normalize(light.position - p))) * light.intensity * hitObj->color();
+                        Vector3 lDirection = light.position - p;
+                        pColor = pColor + ShadingPolicy::lambertian(hitObj->color(), light.intensity, normal, lDirection) + ShadingPolicy::BlinnPhong(hitObj->color(), light.intensity, normal, lDirection, -ray.direction(), 2);                    
                     }
+                    pColor = pColor + ShadingPolicy::Ambient(hitObj->color(), 0.1);
+
                     img.setpixel(i, j, pColor);
                 }
             }
