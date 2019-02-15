@@ -4,7 +4,7 @@
 
 namespace graphics {
 
-    RGBColor ShadingPolicy::lambertian(RGBColor cDiffuse, coordinate_type intensity, Vector3 uNormal, Vector3 lDirection) {
+    RGBColor ShadingPolicy::Lambertian(RGBColor cDiffuse, coordinate_type intensity, Vector3 uNormal, Vector3 lDirection) {
         return std::max(0.0, scalarProduct(uNormal,normalize(lDirection))) * intensity * cDiffuse;
     }
 
