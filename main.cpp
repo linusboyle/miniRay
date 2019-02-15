@@ -52,8 +52,8 @@ int main() {
     // camera / scene
     Scene s;
     s.addObject(surface);
-    s.addLightSource({Point(2.1, 0.2, 3), 1});
-    Camera camera({5.0, 5.0, 5.0}, {-1, -1, -1}, 0.7, {-0.4, 0.4, 0.4, -0.4});
+    s.addLightSource({Point(2.1, -0.4, 3), 0.7});
+    Camera camera({5.0, 5.0, 5.0}, {-1, -1, -1}, 0.7, {-0.2, 0.2, 0.2, -0.2});
     s.render(camera, img);
 
     img.writeout("Sphere.png");
