@@ -26,7 +26,7 @@ namespace graphics {
                 coordinate_type hitPosition = std::numeric_limits<coordinate_type>::max();
 
                 for (auto obj : objects) {
-                    auto result = obj->hit(ray, hitPosition);
+                    auto result = obj->hit(ray, 0, hitPosition);
                     if (result) {
                         hitPosition = result.value();
                         hitObj = obj;

@@ -11,7 +11,11 @@ static inline graphics::coordinate_type discriminant(graphics::coordinate_type A
 
 namespace graphics {
 
-    intersect_type Sphere::hit(const Ray& ray, coordinate_type upperbound) const {
+    intersect_type Sphere::hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) const {
+
+        assert(lowerbound >= 0);
+        assert(lowerbound <= upperbound);
+
         // coefficients
         coordinate_type A = scalarProduct(ray.direction(), ray.direction());
         coordinate_type B = 2 * scalarProduct(ray.direction(), ray.source() - center_);
@@ -27,14 +31,14 @@ namespace graphics {
         } else if (discriminant > 0) {
             // two roots
             coordinate_type root = std::sqrt(discriminant);
-            coordinate_type x2 = (-B / 2 + root) / A;
+            coordinate_type x2 = (-B + root) / (2 * A);
 
             if (x2 < 0) { // intersect behind the camera
                 return {};
             } else {
-                coordinate_type x1 = (- B / 2 - root) / A;
+                coordinate_type x1 = (- B - root) / (2 * A);
 
-                if (x1 <= upperbound) {
+                if (x1 <= upperbound && x1 >= lowerbound) {
                     return x1;
                 } else {
                     return {};
@@ -42,7 +46,7 @@ namespace graphics {
             }
         } else {
             coordinate_type x = (-B / 2) / A;
-            if (x <= upperbound) {
+            if (x <= upperbound && x >= lowerbound) {
                 return x;
             } else {
                 return {};

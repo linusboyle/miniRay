@@ -10,7 +10,7 @@ namespace graphics {
 
     public:
         Sphere(Point center, coordinate_type radius, RGBColor color): Surface(color), center_(center), radius_(radius) {}
-        virtual intersect_type hit(const Ray& ray, coordinate_type upperbound) const;   
+        virtual intersect_type hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) const;   
         virtual BoundingBox boundingbox() const;
         virtual ~Sphere() {}
         virtual Vector3 gradient(const Point& position) const;
