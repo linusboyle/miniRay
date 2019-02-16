@@ -28,6 +28,46 @@ namespace graphics {
         }
     }
 
+    RGBColor Scene::specColor(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound, bool recurse) {
+        this->hitObj = nullptr;
+        auto hitResult = hit(ray, lowerbound, upperbound);
+            
+
+        if (hitResult) {
+            coordinate_type hitPosition = hitResult.value();
+
+            // suppose the image has been filled with background color before render 
+            // process, so that no trouble for that here.
+        
+            // begin shading
+            Point p = ray.source() + hitPosition * ray.direction();
+            Vector3 normal = hitObj->gradient(p);
+            Surface* obj = hitObj;
+            RGBColor pColor = ShadingPolicy::Ambient(hitObj->color(), aIntensity);
+
+            for (auto light : lights) {
+                Vector3 lDirection = light.position - p;
+
+                auto shadowResult = hit({p, lDirection}, epsilon, std::numeric_limits<coordinate_type>::max());
+
+                if (!shadowResult) {
+                    pColor = pColor 
+                            + ShadingPolicy::Lambertian(obj->color(), light.intensity, normal, lDirection) 
+                            + ShadingPolicy::BlinnPhong(obj->color(), light.intensity, normal, lDirection, -ray.direction(), this->phongExponent);
+                }
+            }
+
+            // reflection
+            if (recurse && obj->isReflective()) {
+                Vector3 r = ray.direction() - 2 * scalarProduct(ray.direction(), normal) * normal;
+                pColor = pColor + 0.2 * specColor({p, r}, epsilon, std::numeric_limits<coordinate_type>::max(), false);
+            }
+            return pColor;
+        } else {
+            return {0, 0, 0};
+        }          
+    }
+
     void Scene::render(const Camera& camera, Image& img) {
         auto plane = camera.imagePlane();
         const coordinate_type pWidth = plane.right_bound - plane.left_bound;
@@ -42,34 +82,8 @@ namespace graphics {
                 coordinate_type v = plane.top_bound - (j + 0.5) * vStep;
                 Ray ray = camera.genRay(u, v);
                 
-                this->hitObj = nullptr;
-                auto hitResult = hit(ray, 0, std::numeric_limits<coordinate_type>::max());
-                if (hitResult) {
-                    coordinate_type hitPosition = hitResult.value();
-
-                    // suppose the image has been filled with background color before render 
-                    // process, so that no trouble for that here.
-                
-                    // begin shading
-                    Point p = ray.source() + hitPosition * ray.direction();
-                    Vector3 normal = hitObj->gradient(p);
-                    RGBColor pColor = ShadingPolicy::Ambient(hitObj->color(), aIntensity);
-                    Surface* obj = hitObj;
-
-                    for (auto light : lights) {
-                        Vector3 lDirection = light.position - p;
-
-                        auto shadowResult = hit({p, lDirection}, epsilon, std::numeric_limits<coordinate_type>::max());
-
-                        if (!shadowResult) {
-                            pColor = pColor 
-                                   + ShadingPolicy::Lambertian(obj->color(), light.intensity, normal, lDirection) 
-                                   + ShadingPolicy::BlinnPhong(obj->color(), light.intensity, normal, lDirection, -ray.direction(), this->phongExponent);                    
-                        }
-                    }
-
-                    img.setpixel(i, j, pColor);
-                }
+                RGBColor color = specColor(ray, 0, std::numeric_limits<coordinate_type>::max());
+                img.setpixel(i, j, color);
             }
         }
     }

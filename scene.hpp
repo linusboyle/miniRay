@@ -2,6 +2,7 @@
 #define SCENE_HPP 
 
 #include "vector.hpp"
+#include "color.hpp"
 #include <vector>
 #include <optional>
 
@@ -26,6 +27,7 @@ namespace graphics {
         coordinate_type phongExponent = 10.0;
 
         std::optional<coordinate_type> hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound);
+        RGBColor specColor(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound, bool recurse = true);
     public:
         void render(const Camera& camera, Image& img);
         void addObject(Surface* obj) {

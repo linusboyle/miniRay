@@ -55,7 +55,7 @@ int main() {
     s.setAmbientIntensity(0.25);
     s.addObject(sphere);
     s.addObject(new Sphere({-1.9, 1.1, 0}, 1, {100, 20, 35}));
-    s.addObject(new Plane{Point(1, 0, -1), Point(0, 1, -1), Point(0, -1, -1), {70, 70, 70}});
+    s.addObject(new Plane{Point(1, 0, -1), Point(0, 1, -1), Point(0, -1, -1), {70, 70, 70}, true});
     s.addLightSource({Point(2.7, -0.3, 3.4), 0.7});
     s.addLightSource({Point(1.0, 4.3, 4), 0.3});
     Camera camera({5.0, 5.0, 5.0}, {-1, -1, -1}, 0.7, {-0.4, 0.4, 0.4, -0.4});
