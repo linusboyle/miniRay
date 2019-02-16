@@ -4,8 +4,12 @@ project(miniRay)
 
 include_directories(include)
 
+add_subdirectory(src)
+
 add_compile_options(-std=c++17)
 
-aux_source_directory(src DIR_SRCS)
+#aux_source_directory(src DIR_SRCS)
 
-add_executable(render ${DIR_SRCS})
+add_executable(render main.cpp)
+
+target_link_libraries(render miniray)
