@@ -19,9 +19,12 @@ namespace graphics {
 
     class Surface {
         RGBColor color_;
+        bool reflective;
     public:
-        Surface(const RGBColor& color): color_(color) {}
+        Surface(const RGBColor& color, bool reflective = false): color_(color), reflective(reflective) {}
+
         RGBColor color() const { return color_; }
+        bool isReflective() const { return reflective; }
 
         virtual ~Surface() = 0;
         virtual intersect_type hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) = 0;   

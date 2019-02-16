@@ -3,7 +3,7 @@
 #include <cassert>
 
 namespace graphics {
-    Plane::Plane(Point p1, Point p2, Point p3, RGBColor color): Surface(color), a(std::move(p1)), b(std::move(p2)), c(std::move(p3)) {
+    Plane::Plane(Point p1, Point p2, Point p3, RGBColor color, bool reflective): Surface(color, reflective), a(std::move(p1)), b(std::move(p2)), c(std::move(p3)) {
         // we must have three different points
         assert(!(p1 == p2) && !(p2 == p3));
     }

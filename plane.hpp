@@ -26,7 +26,7 @@ namespace graphics {
     public:
 
         // the order does not matter
-        Plane(Point p1, Point p2, Point p3, RGBColor color);
+        Plane(Point p1, Point p2, Point p3, RGBColor color, bool reflective = false);
 
         virtual intersect_type hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) override;
         virtual BoundingBox boundingbox() const override;

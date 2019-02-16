@@ -9,7 +9,7 @@ namespace graphics {
         coordinate_type radius_;
 
     public:
-        Sphere(Point center, coordinate_type radius, RGBColor color): Surface(color), center_(center), radius_(radius) {}
+        Sphere(Point center, coordinate_type radius, RGBColor color, bool reflective = false): Surface(color, reflective), center_(center), radius_(radius) {}
         virtual intersect_type hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) override;   
         virtual BoundingBox boundingbox() const override;
         virtual ~Sphere() {}
