@@ -22,26 +22,36 @@ namespace graphics {
         coordinate_type C = scalarProduct(ray.source() - center_, ray.source() - center_) - radius_ * radius_; 
 
         assert(A > 0);
-        assert(C > 0);
 
         coordinate_type discriminant = ::discriminant(A, B, C);
 
         if (discriminant < 0) {
-            return {};
+            return std::nullopt;
         } else if (discriminant > 0) {
             // two roots
             coordinate_type root = std::sqrt(discriminant);
-            coordinate_type x2 = (-B + root) / (2 * A);
+            coordinate_type x1 = (- B - root) / (2 * A);
+            coordinate_type x2 = (- B + root) / (2 * A);
 
-            if (x2 < 0) { // intersect behind the camera
-                return {};
-            } else {
-                coordinate_type x1 = (- B - root) / (2 * A);
-
+            if (x1 < x2) { 
                 if (x1 <= upperbound && x1 >= lowerbound) {
                     return x1;
                 } else {
-                    return {};
+                    if (x2 <= upperbound && x2 >= lowerbound) {
+                        return x2;
+                    } else {
+                        return std::nullopt;
+                    }
+                }
+            } else {
+                if (x2 <= upperbound && x2 >= lowerbound) {
+                    return x2;
+                } else {
+                    if (x1 <= upperbound && x1 >= lowerbound) {
+                        return x1;
+                    } else {
+                        return std::nullopt;
+                    }
                 }
             }
         } else {
@@ -49,7 +59,7 @@ namespace graphics {
             if (x <= upperbound && x >= lowerbound) {
                 return x;
             } else {
-                return {};
+                return std::nullopt;
             }
         }
     }

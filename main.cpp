@@ -37,7 +37,7 @@ int main() {
     img.fillcolor({0, 0, 0});
 
     // intersect
-    Surface* sphere = new Sphere(Point{0, 0, 0}, 1.0, {100, 100, 100});
+    Surface* sphere = new Sphere(Point{0, 0, 0}, 1.0, {26, 188, 156});
     Ray ray({1, 1, 1}, {-1, -1, -1});
 
     auto result = sphere->hit(ray, 0, std::numeric_limits<coordinate_type>::max());
@@ -52,10 +52,13 @@ int main() {
     
     // camera / scene
     Scene s;
+    s.setAmbientIntensity(0.25);
     s.addObject(sphere);
+    s.addObject(new Sphere({-1.9, 1.1, 0}, 1, {100, 20, 35}));
     s.addObject(new Plane{Point(1, 0, -1), Point(0, 1, -1), Point(0, -1, -1), {70, 70, 70}});
-    s.addLightSource({Point(2.1, -0.3, 4), 1});
-    Camera camera({5.0, 5.0, 5.0}, {-1, -1, -1}, 0.7, {-0.2, 0.2, 0.2, -0.2});
+    s.addLightSource({Point(2.7, -0.3, 3.4), 0.7});
+    s.addLightSource({Point(1.0, 4.3, 4), 0.3});
+    Camera camera({5.0, 5.0, 5.0}, {-1, -1, -1}, 0.7, {-0.4, 0.4, 0.4, -0.4});
     s.render(camera, img);
 
     img.writeout("render.png");

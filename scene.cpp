@@ -6,8 +6,29 @@
 
 #include <limits>
 
+static constexpr graphics::coordinate_type epsilon = 0.01;
+
 namespace graphics {
-    void Scene::render(const Camera& camera, Image& img) const {
+
+    std::optional<coordinate_type> Scene::hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) {
+        bool hit = false;
+        for (auto obj : objects) {
+            auto result = obj->hit(ray, lowerbound, upperbound);
+            if (result) {
+                hit = true;
+                upperbound = result.value();
+                hitObj = obj;
+            }
+        }
+
+        if (hit) {
+            return upperbound;
+        } else {
+            return std::nullopt;
+        }
+    }
+
+    void Scene::render(const Camera& camera, Image& img) {
         auto plane = camera.imagePlane();
         const coordinate_type pWidth = plane.right_bound - plane.left_bound;
         const coordinate_type pHeight = plane.top_bound - plane.bottom_bound;
@@ -21,33 +42,31 @@ namespace graphics {
                 coordinate_type v = plane.top_bound - (j + 0.5) * vStep;
                 Ray ray = camera.genRay(u, v);
                 
-                Surface* hitObj = nullptr;
-                coordinate_type hitPosition = std::numeric_limits<coordinate_type>::max();
+                this->hitObj = nullptr;
+                auto hitResult = hit(ray, 0, std::numeric_limits<coordinate_type>::max());
+                if (hitResult) {
+                    coordinate_type hitPosition = hitResult.value();
 
-                for (auto obj : objects) {
-                    auto result = obj->hit(ray, 0, hitPosition);
-                    if (result) {
-                        hitPosition = result.value();
-                        hitObj = obj;
-                    }
-                }
-
-                // suppose the image has been filled with background color before render 
-                // process, so that no trouble for that here.
+                    // suppose the image has been filled with background color before render 
+                    // process, so that no trouble for that here.
                 
-                if (hitObj) {
                     // begin shading
                     Point p = ray.source() + hitPosition * ray.direction();
                     Vector3 normal = hitObj->gradient(p);
+                    RGBColor pColor = ShadingPolicy::Ambient(hitObj->color(), aIntensity);
+                    Surface* obj = hitObj;
 
-                    RGBColor pColor{0, 0, 0};
                     for (auto light : lights) {
                         Vector3 lDirection = light.position - p;
-                        pColor = pColor 
-                            + ShadingPolicy::Lambertian(hitObj->color(), light.intensity, normal, lDirection) 
-                            + ShadingPolicy::BlinnPhong(hitObj->color(), light.intensity, normal, lDirection, -ray.direction(), 10);                    
+
+                        auto shadowResult = hit({p, lDirection}, epsilon, std::numeric_limits<coordinate_type>::max());
+
+                        if (!shadowResult) {
+                            pColor = pColor 
+                                   + ShadingPolicy::Lambertian(obj->color(), light.intensity, normal, lDirection) 
+                                   + ShadingPolicy::BlinnPhong(obj->color(), light.intensity, normal, lDirection, -ray.direction(), 10.0);                    
+                        }
                     }
-                    pColor = pColor + ShadingPolicy::Ambient(hitObj->color(), aIntensity);
 
                     img.setpixel(i, j, pColor);
                 }
