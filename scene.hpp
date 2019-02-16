@@ -21,7 +21,9 @@ namespace graphics {
 
         std::vector<Surface*> objects;
         std::vector<LightSource> lights;
+
         coordinate_type aIntensity = 0.2;
+        coordinate_type phongExponent = 10.0;
 
         std::optional<coordinate_type> hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound);
     public:
@@ -34,6 +36,9 @@ namespace graphics {
         }
         void setAmbientIntensity(coordinate_type intensity) {
             aIntensity = intensity;
+        }
+        void setPhongExponent(coordinate_type exponent) {
+            phongExponent = exponent;
         }
     };
 }

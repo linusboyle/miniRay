@@ -64,7 +64,7 @@ namespace graphics {
                         if (!shadowResult) {
                             pColor = pColor 
                                    + ShadingPolicy::Lambertian(obj->color(), light.intensity, normal, lDirection) 
-                                   + ShadingPolicy::BlinnPhong(obj->color(), light.intensity, normal, lDirection, -ray.direction(), 10.0);                    
+                                   + ShadingPolicy::BlinnPhong(obj->color(), light.intensity, normal, lDirection, -ray.direction(), this->phongExponent);                    
                         }
                     }
 
