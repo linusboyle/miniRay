@@ -1,60 +1,51 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-#include "config.hpp"
+#include "matrix.hpp"
+#include <cmath>
 
 namespace graphics {
-    class basic_vector2 {
-        coordinate_type x;
-        coordinate_type y;
+    template <std::size_t Dimension>
+    using basic_vector = MatrixD<Dimension, 1>;
 
-    public:
-        basic_vector2(): basic_vector2(0.0,0.0){}
-        basic_vector2(coordinate_type x, coordinate_type y): x(x), y(y) {}
-        coordinate_type getx() const {return x;}
-        coordinate_type gety() const {return y;}
-        coordinate_type modulus() const;
-    };
+    using Vector3 = basic_vector<3>;
+    using Vector2 = basic_vector<2>;
 
-    basic_vector2 operator+(const basic_vector2& lhs, const basic_vector2& rhs);
-    basic_vector2 operator-(const basic_vector2& lhs, const basic_vector2& rhs);
-    basic_vector2 normalize(const basic_vector2& vec);
-    coordinate_type scalarProduct(const basic_vector2& lhs, const basic_vector2& rhs);
+    template <std::size_t Index, std::size_t Dimension>
+    inline auto get(const basic_vector<Dimension>& v) {
+        static_assert(Index < Dimension);
+        return v(Index, 0);
+    }
 
-    using Vector2 = basic_vector2;
+    template <std::size_t Dimension>
+    auto scalarProduct(const basic_vector<Dimension>& lhs, const basic_vector<Dimension>& rhs) {
+        coordinate_type retval = 0.0;
+        for (std::size_t i = 0; i < Dimension; ++i) {
+            retval += lhs(i, 0) * rhs(i, 0);
+        }
 
-    class basic_vector3 {
-        coordinate_type x;
-        coordinate_type y;
-        coordinate_type z;
+        return retval;
+    }
 
-    public:
-        basic_vector3(): basic_vector3(0.0, 0.0, 0.0) {}
-        basic_vector3(coordinate_type x, coordinate_type y, coordinate_type z): x(x), y(y), z(z) {}
-        coordinate_type getx() const {return x;}
-        coordinate_type gety() const {return y;}
-        coordinate_type getz() const {return z;}
-        coordinate_type modulus() const;
-    };
+    template <std::size_t Dimension>
+    auto modulus(const basic_vector<Dimension>& v) {
+        coordinate_type qsum = 0.0;
+        for (std::size_t i = 0; i < Dimension; ++i) {
+            qsum += v(i, 0) * v(i, 0);
+        }
 
-    basic_vector3 operator+(const basic_vector3& lhs, const basic_vector3& rhs);
+        return std::sqrt(qsum);
+    }
 
-    basic_vector3 operator-(const basic_vector3& operand);
-    basic_vector3 operator-(const basic_vector3& lhs, const basic_vector3& rhs);
+    template <std::size_t Dimension>
+    inline auto normalize(const basic_vector<Dimension>& v) {
+        coordinate_type modulus = graphics::modulus(v);
 
-    basic_vector3 operator*(const basic_vector3& lhs, const basic_vector3& rhs);
-    basic_vector3 operator*(coordinate_type lhs, const basic_vector3& rhs);
+        return v / modulus;
+    }
 
-    basic_vector3 operator/(const basic_vector3& lhs, coordinate_type rhs);
+    Vector3 crossProduct(const Vector3& lhs, const Vector3& rhs);
 
-    basic_vector3 normalize(const basic_vector3& vec);
-
-    bool operator==(const basic_vector3& lhs, const basic_vector3& rhs);
-
-    coordinate_type scalarProduct(const basic_vector3& lhs, const basic_vector3& rhs);
-
-    using Vector3 = basic_vector3;
-    using Point = basic_vector3; // a 3d point can be seen as a vector
+    using Point = Vector3;
 }
-
 #endif /* ifndef VECTOR_HPP */

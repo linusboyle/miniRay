@@ -17,20 +17,20 @@ int main() {
     Vector3 c = {0, 0, 1};
     
     assert(-(-a) == a);
-    assert((a + b + c) == Vector3(1, 1, 1));
+    assert((a + b + c) == Vector3({1, 1, 1}));
     assert(scalarProduct(a, b) == 0);
-    assert(a / 2 == Vector3(0.5, 0, 0));
+    assert(a / 2 == Vector3({0.5, 0, 0}));
 
     // right-hand frame
-    assert(a * b == c);
-    assert(a * c == -b);
-    assert(b * c == a);
-    assert(b * a == -c);
-    assert(c * a == b);
-    assert(c * b == -a);
+    assert(crossProduct(a, b) == c);
+    assert(crossProduct(a, c) == -b);
+    assert(crossProduct(b, c) == a);
+    assert(crossProduct(b, a) == -c);
+    assert(crossProduct(c, a) == b);
+    assert(crossProduct(c, b) == -a);
 
     // cross
-    assert(Vector3(2.4,0,0) * Vector3(0, 5.5, 0) == Vector3(0, 0, 13.2)); 
+    assert(crossProduct(Vector3({2.4,0,0}), Vector3({0, 5.5, 0})) == Vector3({0, 0, 13.2}));
 
     // color / image
     Image img(Width(512), Height(512));
@@ -45,7 +45,7 @@ int main() {
     if (result) {
         coordinate_type point = result.value();
         Point p = ray.source() + point * ray.direction();
-        std::cout << "hit at: " << p.getx() << ' ' << p.gety() << ' ' << p.getz() << ' ' << std::endl;
+        std::cout << "hit at: " << get<0>(p)<< ' ' << get<1>(p) << ' ' << get<2>(p) << ' ' << std::endl;
     } else {
         std::cout << "not hit" << std::endl;
     }
@@ -55,9 +55,9 @@ int main() {
     s.setAmbientIntensity(0.25);
     s.addObject(sphere);
     s.addObject(new Sphere({-1.9, 1.1, 0}, 1, {100, 20, 35}));
-    s.addObject(new Plane{Point(1, 0, -1), Point(0, 1, -1), Point(0, -1, -1), {70, 70, 70}, true});
-    s.addLightSource({Point(2.7, -0.3, 3.4), 0.7});
-    s.addLightSource({Point(1.0, 4.3, 4), 0.3});
+    s.addObject(new Plane{ {1, 0, -1}, {0, 1, -1}, {0, -1, -1}, {70, 70, 70}, true});
+    s.addLightSource({ {2.7, -0.3, 3.4}, 0.7});
+    s.addLightSource({ {1.0, 4.3, 4}, 0.3});
     Camera camera({5.0, 5.0, 5.0}, {-1, -1, -1}, 0.7, {-0.4, 0.4, 0.4, -0.4});
     s.render(camera, img);
 

@@ -4,4 +4,4 @@ add_compile_options(-std=c++17)
 
 aux_source_directory(. DIR_SRCS)
 
-add_library(miniray ${DIR_SRCS})
+add_library(graphics ${DIR_SRCS})

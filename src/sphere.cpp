@@ -70,8 +70,8 @@ namespace graphics {
     }
 
     BoundingBox Sphere::boundingbox() const {
-        Point first = center_ - Point(radius_, radius_, radius_);
-        Point second = center_ + Point(radius_, radius_, radius_);
+        Point first = center_ - Point{radius_, radius_, radius_};
+        Point second = center_ + Point{radius_, radius_, radius_};
         return {first, second};
     }
 }
