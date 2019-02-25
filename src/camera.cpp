@@ -1,6 +1,6 @@
 #include "camera.hpp"
 
-static const graphics::Vector3 upVector = {0, 0, 1};
+static const graphics::Vector3 upVector {0.0, 0.0, 1.0};
 
 namespace graphics {
     Camera::Camera(const Point& viewpoint, const Vector3& view_direction, coordinate_type length, const ImagePlane& plane): 

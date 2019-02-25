@@ -2,10 +2,10 @@
 #define MATRIX_HPP
 
 #include <cstring>
-#include <type_traits>
 #include <ostream>
 
 #include "config.hpp"
+#include "meta.hpp"
 
 namespace graphics {
     template <std::size_t ROWS, std::size_t COLUMNS, typename T>
@@ -27,18 +27,13 @@ namespace graphics {
             std::memcpy(matrix_, source, sizeof(T) * ROWS * COLUMNS);
         }
 
+        template <typename... EList, typename std::enable_if<nonarrow_convertible<T, EList...>::value, bool>::type = true>
+        explicit base_matrix(EList&&... es): matrix_{es...} {
+            static_assert(sizeof...(es) == ROWS * COLUMNS, "elements number does not match the size of the matrix!");
+        }
+
         // TODO:
         // a more generic constructor using variadic template
-
-        base_matrix(std::initializer_list<T> l) {
-            if (l.size() != ROWS * COLUMNS) {
-                throw std::logic_error("number of elements is incorrect!");
-            }
-            std::size_t i = 0; 
-            for (const auto& e : l) {
-                matrix_[i++] = e;
-            }
-        }
 
         template <typename F>
         void for_each(F&& f) {
