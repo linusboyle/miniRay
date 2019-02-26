@@ -1,8 +1,8 @@
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
-#include <cstring>
 #include <ostream>
+#include <iterator>
 
 #include "config.hpp"
 #include "meta.hpp"
@@ -23,17 +23,23 @@ namespace graphics {
 
     public:
         base_matrix() {}
-        explicit base_matrix(const T source[ROWS * COLUMNS]) { // unsafe
-            std::memcpy(matrix_, source, sizeof(T) * ROWS * COLUMNS);
+
+        template <typename Iterator, std::enable_if_t<meta::is_forward_iterator_v<Iterator>, bool> = true>
+        explicit base_matrix(Iterator begin, Iterator end) {
+            std::size_t i = 0;
+            while(begin != end) {
+                if (i >= ROWS * COLUMNS) {
+                    throw std::logic_error("number of matrix elements is wrong!");
+                }
+                matrix_[i++] = *begin;
+                begin++;
+            }
         }
 
-        template <typename... EList, typename std::enable_if<nonarrow_convertible<T, EList...>::value, bool>::type = true>
-        explicit base_matrix(EList&&... es): matrix_{es...} {
+        template <typename... EList, std::enable_if_t<meta::nonarrow_convertible<T, EList...>::value, bool> = true>
+        explicit base_matrix(EList&&... es): matrix_{std::forward<EList>(es)...} {
             static_assert(sizeof...(es) == ROWS * COLUMNS, "elements number does not match the size of the matrix!");
         }
-
-        // TODO:
-        // a more generic constructor using variadic template
 
         template <typename F>
         void for_each(F&& f) {
