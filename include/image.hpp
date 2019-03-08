@@ -6,12 +6,12 @@
 namespace graphics {
     struct Height {
         unsigned int value;
-        Height(unsigned int val): value(val) {}
+        explicit Height(unsigned int val): value(val) {}
     };
 
     struct Width {
         unsigned int value;
-        Width(unsigned int val):value(val){}
+        explicit Width(unsigned int val): value(val) {}
     };
 
     class Image {
@@ -30,6 +30,9 @@ namespace graphics {
 
         void setpixel(unsigned int x, unsigned int y, RGBColor color); 
         void fillcolor(RGBColor color);
+
+        void drawline(unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, RGBColor color);
+
         void writeout(const char* filename) const ;
 
         unsigned int width() const {
