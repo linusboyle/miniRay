@@ -6,10 +6,10 @@
 
 namespace graphics {
     template <std::size_t Dimension>
-    using basic_vector = MatrixD<Dimension, 1>;
+    using basic_vector = Matrix<Dimension, 1>;
 
-    using Vector3 = basic_vector<3>;
     using Vector2 = basic_vector<2>;
+    using Vector3 = basic_vector<3>;
 
     template <std::size_t Index, std::size_t Dimension>
     inline auto get(const basic_vector<Dimension>& v) {
@@ -27,6 +27,8 @@ namespace graphics {
         return retval;
     }
 
+    Vector3 crossProduct(const Vector3& lhs, const Vector3& rhs);
+
     template <std::size_t Dimension>
     auto modulus(const basic_vector<Dimension>& v) {
         coordinate_type qsum = 0.0;
@@ -43,8 +45,6 @@ namespace graphics {
 
         return v / modulus;
     }
-
-    Vector3 crossProduct(const Vector3& lhs, const Vector3& rhs);
 
     using Point = Vector3;
 }
