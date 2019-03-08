@@ -43,11 +43,11 @@ namespace graphics {
             return matrix_[ row * COLUMNS + column ];
         }
 
-        T& operator() (std::size_t row, std::size_t column) {
+        T& operator() (std::size_t row, std::size_t column = 0ul) {
             return getElement(row, column);
         }
 
-        const T& operator() (std::size_t row, std::size_t column) const {
+        const T& operator() (std::size_t row, std::size_t column = 0ul) const {
             return getElement(row, column);
         }
 

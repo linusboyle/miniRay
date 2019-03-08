@@ -9,16 +9,16 @@
 
 namespace graphics {
     void Image::setpixel(unsigned int x, unsigned int y, const RGBColor& color) {
-        unsigned char* p = rgb_ + (y * width_.value + x) * 3;
-        p[0] = static_cast<unsigned char>(255 * color.R);
-        p[1] = static_cast<unsigned char>(255 * color.G);
-        p[2] = static_cast<unsigned char>(255 * color.B);
+        const unsigned int base = (y * width_.value + x) * 3;
+        rgb_[base] = static_cast<unsigned char>(255 * color.R);
+        rgb_[base + 1] = static_cast<unsigned char>(255 * color.G);
+        rgb_[base + 2] = static_cast<unsigned char>(255 * color.B);
     }
 
     void Image::fillcolor(const RGBColor& color) {
         // optimization using memset
         if (color.R == color.B && color.B == color.G) {
-            std::memset(rgb_, static_cast<unsigned char>(255 * color.R), width_.value * height_.value * 3);
+            std::memset(rgb_.data(), static_cast<unsigned char>(255 * color.R), width_.value * height_.value * 3);
         } else {
             // brute-force
             for (unsigned int x = 0, width = width_.value; x < width; ++x) {
@@ -31,7 +31,7 @@ namespace graphics {
 
     void Image::writeout(const char* filename) const {
         auto file = std::fopen(filename, "wb");
-        svpng(file, width_.value, height_.value, rgb_, 0);
+        svpng(file, width_.value, height_.value, rgb_.data(), 0);
         std::fclose(file);
     }
 
