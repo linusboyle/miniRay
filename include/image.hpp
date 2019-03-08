@@ -1,9 +1,9 @@
 #ifndef IMAGE_CPP
 #define IMAGE_CPP
 
-#include "color.hpp"
-
 namespace graphics {
+    class RGBColor;
+
     struct Height {
         unsigned int value;
         explicit Height(unsigned int val): value(val) {}
@@ -28,10 +28,10 @@ namespace graphics {
 
         ~Image() { delete []rgb_; }
 
-        void setpixel(unsigned int x, unsigned int y, RGBColor color); 
-        void fillcolor(RGBColor color);
+        void setpixel(unsigned int x, unsigned int y, const RGBColor& color); 
+        void fillcolor(const RGBColor& color);
 
-        void drawline(unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, RGBColor color);
+        void drawline(unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, const RGBColor& color);
 
         void writeout(const char* filename) const ;
 
