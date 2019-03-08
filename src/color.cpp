@@ -2,44 +2,44 @@
 
 namespace graphics {
     RGBColor operator+ (const RGBColor& lhs, const RGBColor& rhs) {
-        unsigned short R = static_cast<unsigned short>(lhs.R) + static_cast<unsigned short>(rhs.R);
-        if (R > 255)
-            R = 255;
-        unsigned short G = static_cast<unsigned short>(lhs.G) + static_cast<unsigned short>(rhs.G);
-        if (G > 255)
-            G = 255;
-        unsigned short B = static_cast<unsigned short>(lhs.B) + static_cast<unsigned short>(rhs.B);
-        if (B > 255)
-            B = 255;
+        double R = lhs.R + rhs.R;
+        if (R > 1.0)
+            R = 1.0;
+        double G = lhs.G + rhs.G;
+        if (G > 1.0)
+            G = 1.0;
+        double B = lhs.B + rhs.B;
+        if (B > 1.0)
+            B = 1.0;
 
-        return {static_cast<unsigned char>(R), static_cast<unsigned char>(G), static_cast<unsigned char>(B)};
+        return {R, G, B};
     }
 
     RGBColor operator- (const RGBColor& lhs, const RGBColor& rhs) {
-        short R = static_cast<short>(lhs.R) - static_cast<short>(rhs.R);
-        if (R < 0)
-            R = 0;
-        short G = static_cast<short>(lhs.G) - static_cast<short>(rhs.G);
-        if (G < 0)
-            G = 0;
-        short B = static_cast<short>(lhs.B) - static_cast<short>(rhs.B);
-        if (B < 0)
-            B = 0;
+        double R = lhs.R - rhs.R;
+        if (R < 0.0)
+            R = 0.0;
+        double G = lhs.G - rhs.G;
+        if (G < 0.0)
+            G = 0.0;
+        double B = lhs.B - rhs.B;
+        if (B < 0.0)
+            B = 0.0;
 
-        return {static_cast<unsigned char>(R), static_cast<unsigned char>(G), static_cast<unsigned char>(B)};
+        return {R, G, B};
     }
 
-    RGBColor operator*(coordinate_type lhs, const RGBColor& rhs) {
-        coordinate_type R = lhs * static_cast<coordinate_type>(rhs.R);
-        if (R > 255)
-            R = 255;
-        coordinate_type G = lhs * static_cast<coordinate_type>(rhs.G);
-        if (G > 255)
-            G = 255;
-        coordinate_type B = lhs * static_cast<coordinate_type>(rhs.B);
-        if (B > 255)
-            B = 255;
+    RGBColor operator*(double lhs, const RGBColor& rhs) {
+        double R = lhs * rhs.R;
+        if (R > 1.0)
+            R = 1.0;
+        double G = lhs * rhs.G;
+        if (G > 1.0)
+            G = 1.0;
+        double B = lhs * rhs.B;
+        if (B > 1.0)
+            B = 1.0;
 
-        return {static_cast<unsigned char>(R), static_cast<unsigned char>(G), static_cast<unsigned char>(B)};
+        return {R, G, B};
     }
 }
