@@ -14,6 +14,7 @@ namespace graphics {
             for (std::size_t j = 0; j < M; ++j) {
                 if (lhs.getElement(i, j) != rhs.getElement(i, j))
                     return false;
+            }
         }
         return true;
     }

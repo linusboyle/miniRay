@@ -4,22 +4,35 @@
 
 using namespace graphics;
 
-#include <fstream>
 #include "cereal/archives/json.hpp"
 #include "cereal/types/vector.hpp"
 
+#include <filesystem>
+#include <fstream>
+
+namespace fs = std::filesystem;
+
 TEST_CASE ("image can be manipulated correctly", "[image]") {
-    Image img(Width{512}, Height{512});
+    Image img(512, 512);
 
     REQUIRE(img.height() == 512);
     REQUIRE(img.width() == 512);
 
-    img.fillcolor({0, 0, 0});
-    img.writeout("blackbg.png");
+    SECTION("Image can fill the right color") {
+        img.fillcolor({0, 0, 0});
+        Image imgb(512, 512);
 
-    std::ofstream f("blackbg.json");
-    {
-        cereal::JSONOutputArchive ar(f);
-        ar(img);
+        std::ifstream f("blackbg.json");
+        {
+            cereal::JSONInputArchive ar(f);
+            ar(imgb);
+        }
+        REQUIRE(img == imgb);
+    }
+
+    SECTION("Image can create real image file correctly") {
+        img.writeout("blackbg.png");
+        fs::path rendered_path = "./blackbg.png";
+        REQUIRE(fs::exists(rendered_path));
     }
 }
