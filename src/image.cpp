@@ -18,7 +18,7 @@ namespace graphics {
     void Image::fillcolor(const RGBColor& color) {
         // optimization using memset
         if (color.R == color.B && color.B == color.G) {
-            std::memset(rgb_.data(), static_cast<unsigned char>(255 * color.R), width_ * height_ * 3);
+            std::memset(rgb_.data(), static_cast<unsigned char>(255 * color.R), width_ * height_ * 3 * sizeof(unsigned char));
         } else {
             // brute-force
             for (unsigned int x = 0; x < width_; ++x) {
@@ -37,5 +37,9 @@ namespace graphics {
 
     void Image::drawline(unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, const RGBColor& color) {
         raster::bresenham(*this, x1, y1, x2, y2, color);
+    }
+
+    void Image::drawcircle(unsigned int x, unsigned int y, unsigned int radius, const RGBColor& color) {
+        raster::bresenham_circle(*this, x, y, radius, color);
     }
 }
