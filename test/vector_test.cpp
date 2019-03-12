@@ -19,7 +19,7 @@ TEST_CASE ("vectors can be calculated correctly", "[vector]") {
         REQUIRE ((a + b + c) == Vector3{2.4, 5.5, 13.2});
     }
     SECTION("scalarProduct of vertical vectors is 0") {
-        REQUIRE (scalarProduct(a, b) == 0);
+        REQUIRE (scalarProduct(a, b) == 0.0);
     }
     SECTION("crossProduct of vectors computed correctly") {
         REQUIRE (crossProduct(a, b) == c);

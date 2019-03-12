@@ -31,7 +31,6 @@ namespace graphics {
     RGBColor Scene::specColor(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound, bool recurse) {
         this->hitObj = nullptr;
         auto hitResult = hit(ray, lowerbound, upperbound);
-            
 
         if (hitResult) {
             coordinate_type hitPosition = hitResult.value();
@@ -64,7 +63,7 @@ namespace graphics {
             }
             return pColor;
         } else {
-            return {0, 0, 0};
+            return {0.0, 0.0, 0.0};
         }          
     }
 
@@ -76,9 +75,9 @@ namespace graphics {
         const coordinate_type uStep = pWidth / img.width();
         const coordinate_type vStep = pHeight / img.height();
 
-        for (unsigned int i = 0; i < img.width(); ++i) {
+        for (int i = 0; i < img.width(); ++i) {
             coordinate_type u = plane.left_bound + (i + 0.5) * uStep;
-            for (unsigned int j = 0; j < img.height(); ++j) {
+            for (int j = 0; j < img.height(); ++j) {
                 coordinate_type v = plane.top_bound - (j + 0.5) * vStep;
                 Ray ray = camera.genRay(u, v);
                 
