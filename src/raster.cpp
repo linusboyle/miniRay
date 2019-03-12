@@ -1,6 +1,20 @@
 #include "raster.hpp"
 #include "image.hpp"
+#include "color.hpp"
 #include <cmath>
+
+static inline double fpart(double number) {
+    if (number > 0.0) {
+        return number - static_cast<int>(number);
+    }
+    else {
+        return number - static_cast<int>(number) + 1;
+    }
+}
+
+static inline int ipart(double number) {
+    return static_cast<int>(number);
+}
 
 namespace graphics::raster {
     static inline void drawpixel4(Image& img, int centerx, int centery, int x, int y, const RGBColor& color) {
@@ -33,9 +47,9 @@ namespace graphics::raster {
         deviation += ((x - y) << 1) + 2;
     }
 
-    void bresenham(Image& img, unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, const RGBColor& color) {
-        int deltax = std::abs(static_cast<int>(x1) - static_cast<int>(x2));
-        int deltay = std::abs(static_cast<int>(y1) - static_cast<int>(y2));
+    void bresenham(Image& img, int x1, int y1, int x2, int y2, const RGBColor& color) {
+        int deltax = std::abs(x1 - x2);
+        int deltay = std::abs(y1 - y2);
 
         const int stepx = x1 < x2 ? 1 : -1;
         const int stepy = y1 < y2 ? 1 : -1;
@@ -98,6 +112,54 @@ namespace graphics::raster {
                 }
             } else {
                 moveRight(offset_x, offset_y, deviation);
+            }
+        }
+    }
+
+    void XiaolinWuLine(Image& img, int x1, int y1, int x2, int y2, const RGBColor& color) {
+        const int deltax = std::abs(x1 - x2);
+        const int deltay = std::abs(y1 - y2);
+        const bool steep = deltax < deltay;
+
+        if (steep) {
+            std::swap(x1, y1);
+            std::swap(x2, y2);
+        }
+
+        if (x1 > x2) {
+            std::swap(x1, x2);
+            std::swap(y1, y2);
+        }
+
+        const double dx = x2 - x1;
+        const double dy = y2 - y1;
+        double gradient;
+
+        if (dx == 0.0) {
+            gradient = 1.0;
+        } else {
+            gradient = dy / dx;
+        }
+
+        double deviation = y1;
+
+        if (steep) {
+            for (int x = x1; x <= x2; ++x) {
+                const int pos = ipart(deviation);
+                const double fractional = fpart(deviation);
+                const RGBColor bgColor = img.getpixel(pos + 1, x);
+                img.setpixel(pos, x, (1.0 - fractional) * color + fractional * bgColor);
+                img.setpixel(pos + 1, x, fractional * color + (1.0 - fractional) * bgColor);
+                deviation += gradient;
+            }
+        } else {
+            for (int x = x1; x <= x2; ++x) {
+                const int pos = ipart(deviation);
+                const double fractional = fpart(deviation);
+                const RGBColor bgColor = img.getpixel(x, pos + 1);
+                img.setpixel(x, pos, (1.0 - fractional) * color + fractional * bgColor);
+                img.setpixel(x, pos + 1, fractional * color + (1.0 - fractional) * bgColor);
+                deviation += gradient;
             }
         }
     }

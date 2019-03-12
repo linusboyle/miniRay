@@ -3,7 +3,8 @@ namespace graphics {
     class RGBColor;
 
     namespace raster {
-        void bresenham(Image& img, unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, const RGBColor& color);
-        void bresenham_circle(Image& img, int centerx, int centery, int radius, const RGBColor& color); 
+        void bresenham(Image& img, int x1, int y1, int x2, int y2, const RGBColor& color);
+        void bresenham_circle(Image& img, int centerx, int centery, int radius, const RGBColor& color);
+        void XiaolinWuLine(Image& img, int x1, int y1, int x2, int y2, const RGBColor& color);
     }
 }

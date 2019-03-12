@@ -1,45 +1,47 @@
-#include <cstdio>
-#define SVPNG_OUTPUT FILE* fp
-#include "svpng.h"
-
 #include "image.hpp"
 #include "raster.hpp"
 #include "color.hpp"
-#include <cstring>
 
 namespace graphics {
-    void Image::setpixel(unsigned int x, unsigned int y, const RGBColor& color) {
-        const unsigned int base = (y * width_ + x) * 3;
-        rgb_[base] = static_cast<unsigned char>(255 * color.R);
-        rgb_[base + 1] = static_cast<unsigned char>(255 * color.G);
-        rgb_[base + 2] = static_cast<unsigned char>(255 * color.B);
+    void Image::setpixel(int x, int y, const RGBColor& color) {
+        auto& val = rgb_.at<cv::Vec3b>(y, x);
+        val.val[0] = color.b();
+        val.val[1] = color.g();
+        val.val[2] = color.r();
+    }
+
+    RGBColor&& Image::getpixel(int x, int y) const {
+        auto& val = rgb_.at<cv::Vec3b>(y, x);
+        RGBColor retval{val.val[2], val.val[1], val.val[0]};
+        return std::move(retval);
     }
 
     void Image::fillcolor(const RGBColor& color) {
-        // optimization using memset
-        if (color.R == color.B && color.B == color.G) {
-            std::memset(rgb_.data(), static_cast<unsigned char>(255 * color.R), width_ * height_ * 3 * sizeof(unsigned char));
-        } else {
-            // brute-force
-            for (unsigned int x = 0; x < width_; ++x) {
-                for (unsigned int y = 0; y < height_; ++y) {
-                    setpixel(x, y, color);
-                }
-            }
-        }
+        rgb_.setTo(cv::Scalar(color.b(), color.g(), color.r()));
     }
 
     void Image::writeout(const char* filename) const {
-        auto file = std::fopen(filename, "wb");
-        svpng(file, width_, height_, rgb_.data(), 0);
-        std::fclose(file);
+        cv::imwrite(filename, rgb_);
     }
 
-    void Image::drawline(unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, const RGBColor& color) {
-        raster::bresenham(*this, x1, y1, x2, y2, color);
+    void Image::drawline(int x1, int y1, int x2, int y2, const RGBColor& color) {
+        // TODO
+        // implement cropping at this level
+        if (x1 < 0 || x1 >= width_ || x2 < 0 || x2 >= width_ || y1 < 0 || y1 >= height_ || y2 < 0 || y2 >= height_) {
+            throw std::invalid_argument("the line contains part that's outside the image; cropping has not been implemented yet!");
+        }
+
+        if (use_antialiasing) {
+            raster::XiaolinWuLine(*this, x1, y1, x2, y2, color);
+        } else {
+            raster::bresenham(*this, x1, y1, x2, y2, color);
+        }
     }
 
-    void Image::drawcircle(unsigned int x, unsigned int y, unsigned int radius, const RGBColor& color) {
+    void Image::drawcircle(int x, int y, int radius, const RGBColor& color) {
+        if (x < radius || x >= width_ - radius || y < radius || y >= height_ - radius) {
+            throw std::invalid_argument("the circle contains part that's outside the image; cropping has not been implemented yet!");
+        }
         raster::bresenham_circle(*this, x, y, radius, color);
     }
 }

@@ -1,48 +1,58 @@
 #ifndef IMAGE_CPP
 #define IMAGE_CPP
 
-#include <vector>
+#include <opencv2/opencv.hpp>
 
 namespace graphics {
     class RGBColor;
 
     class Image {
-        std::vector<unsigned char> rgb_;
-        unsigned int width_;
-        unsigned int height_;
+
+    private:
+        cv::Mat rgb_;
+        int width_;
+        int height_;
+        bool use_antialiasing;
 
     public:
-        Image(unsigned int width, unsigned int height)
-            : rgb_(width * height * 3, 0)
+
+        Image(int width, int height)
+            : rgb_(width, height, CV_8UC3, cv::Scalar{0, 0, 0})
             , width_(width)
-            , height_(height) 
+            , height_(height)
+            , use_antialiasing(false)
         {}
 
-        void setpixel(unsigned int x, unsigned int y, const RGBColor& color); 
+        /*
+         * color
+         */
+        void setpixel(int x, int y, const RGBColor& color);
+        RGBColor&& getpixel(int x, int y) const;
         void fillcolor(const RGBColor& color);
 
-        void drawline(unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2, const RGBColor& color);
-        void drawcircle(unsigned int x, unsigned int y, unsigned int radius, const RGBColor& color);
+        /*
+         * rendering
+         */
+        void drawline(int x1, int y1, int x2, int y2, const RGBColor& color);
+        void drawcircle(int x, int y, int radius, const RGBColor& color);
 
+        /* image IO*/
         void writeout(const char* filename) const;
+        void show() const {
+            cv::imshow("intermediate picture", rgb_);
+            cv::waitKey();
+        }
 
-        unsigned int width() const {
+        void setAntialiasing(bool option = true) {
+            this->use_antialiasing = option;
+        }
+
+        int width() const {
             return width_;
         }
 
-        unsigned int height() const {
+        int height() const {
             return height_;
-        }
-
-        // for cereal to serial this picture
-        template <class Archive>
-        void serialize(Archive & archive)
-        {
-            archive( width_, height_, rgb_ );
-        }
-
-        friend bool operator==(const Image& lhs, const Image& rhs) {
-            return lhs.width_ == rhs.width_ && lhs.height_ == rhs.height_ && lhs.rgb_ == rhs.rgb_;
         }
     };
 }
