@@ -1,5 +1,6 @@
 #include <type_traits>
- 
+#include <iterator>
+
 namespace graphics::meta {
     // 1. Implementing a variadic logical AND
     template <bool...> struct bool_sequence {};

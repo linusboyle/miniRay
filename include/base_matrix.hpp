@@ -1,7 +1,6 @@
 #ifndef BASE_MATRIX_HPP
 #define BASE_MATRIX_HPP
 
-#include <iterator>
 #include "meta.hpp"
 
 namespace graphics {
