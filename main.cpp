@@ -33,22 +33,22 @@ int main() {
     assert(( crossProduct(Vector3{2.4,0.0,0.0}, Vector3{0.0, 5.5, 0.0}) == Vector3{0.0, 0.0, 13.2} ));
 
     // color / image
-    Image img(Width(512), Height(512));
+    Image img(512, 512);
     img.fillcolor({0, 0, 0});
 
     // intersect
     Surface* sphere = new Sphere(Point{0.0, 0.0, 0.0}, 1.0, {26.0 / 255.0, 188.0 / 255.0, 156.0 / 255.0});
-    Ray ray(Point{1.0, 1.0, 1.0}, Vector3{-1.0, -1.0, -1.0});
+    //Ray ray(Point{1.0, 1.0, 1.0}, Vector3{-1.0, -1.0, -1.0});
 
-    auto result = sphere->hit(ray, 0, std::numeric_limits<coordinate_type>::max());
+    //auto result = sphere->hit(ray, 0, std::numeric_limits<coordinate_type>::max());
 
-    if (result) {
-        coordinate_type point = result.value();
-        Point p = ray.source() + point * ray.direction();
-        std::cout << "hit at: " << get<0>(p)<< ' ' << get<1>(p) << ' ' << get<2>(p) << ' ' << std::endl;
-    } else {
-        std::cout << "not hit" << std::endl;
-    }
+    //if (result) {
+        //coordinate_type point = result.value();
+        //Point p = ray.source() + point * ray.direction();
+        //std::cout << "hit at: " << get<0>(p)<< ' ' << get<1>(p) << ' ' << get<2>(p) << ' ' << std::endl;
+    //} else {
+        //std::cout << "not hit" << std::endl;
+    //}
     
     // camera / scene
     Scene s;

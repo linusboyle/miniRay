@@ -5,7 +5,7 @@ namespace graphics {
     Plane::Plane(const Point& p1, const Point& p2, const Point& p3, RGBColor color, bool reflective): Surface(color, reflective), a(p1), b(p2), c(p3) {
         // we must have three different points
         if (p1 == p2 || p2 == p3 || p1 == p3) {
-            throw std::logic_error("Plane must be constructed from three different points");
+            throw std::invalid_argument("Plane must be constructed from three different points");
         }
     }
 
@@ -33,7 +33,7 @@ namespace graphics {
     intersect_type Plane::hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) {
 
         const Vector3 normal_ = normal();
-        if (scalarProduct(normal_, ray.direction()) == 0) { // parallel
+        if (scalarProduct(normal_, ray.direction()) == 0.0) { // parallel
             return {};
         }
 
@@ -51,27 +51,27 @@ namespace graphics {
     std::tuple<coordinate_type, coordinate_type, coordinate_type> Plane::solution(const Ray& ray) {
 
         Matrix<3,3> m1 {
-            get<0>(a) - get<0>(ray.source()), get<0>(a) - get<0>(c), get<0>(ray.direction()),
-            get<1>(a) - get<1>(ray.source()), get<1>(a) - get<1>(c), get<1>(ray.direction()),
-            get<2>(a) - get<2>(ray.source()), get<2>(a) - get<2>(c), get<2>(ray.direction())
+            a(0) - ray.source()(0), a(0) - c(0), ray.direction()(0),
+            a(1) - ray.source()(1), a(1) - c(1), ray.direction()(1),
+            a(2) - ray.source()(2), a(2) - c(2), ray.direction()(2)
         };
 
         Matrix<3,3> m2 {
-            get<0>(a) - get<0>(b), get<0>(a) - get<0>(ray.source()), get<0>(ray.direction()),
-            get<1>(a) - get<1>(b), get<1>(a) - get<1>(ray.source()), get<1>(ray.direction()),
-            get<2>(a) - get<2>(b), get<2>(a) - get<2>(ray.source()), get<2>(ray.direction())
+            a(0) - b(0), a(0) - ray.source()(0), ray.direction()(0),
+            a(1) - b(1), a(1) - ray.source()(1), ray.direction()(1),
+            a(2) - b(2), a(2) - ray.source()(2), ray.direction()(2)
         };
 
         Matrix<3,3> m3 {
-            get<0>(a) - get<0>(b), get<0>(a) - get<0>(c), get<0>(a)-get<0>(ray.source()),
-            get<1>(a) - get<1>(b), get<1>(a) - get<1>(c), get<1>(a)-get<1>(ray.source()),
-            get<2>(a) - get<2>(b), get<2>(a) - get<2>(c), get<2>(a)-get<2>(ray.source())
+            a(0) - b(0), a(0) - c(0), a(0)- ray.source()(0),
+            a(1) - b(1), a(1) - c(1), a(1)- ray.source()(1),
+            a(2) - b(2), a(2) - c(2), a(2)- ray.source()(2)
         };
 
         Matrix<3,3> A {
-            get<0>(a) - get<0>(b), get<0>(a) - get<0>(c), get<0>(a)-get<0>(ray.direction()),
-            get<1>(a) - get<1>(b), get<1>(a) - get<1>(c), get<1>(a)-get<1>(ray.direction()),
-            get<2>(a) - get<2>(b), get<2>(a) - get<2>(c), get<2>(a)-get<2>(ray.direction())
+            a(0) - b(0), a(0) - c(0), a(0) - ray.direction()(0),
+            a(1) - b(1), a(1) - c(1), a(1) - ray.direction()(1),
+            a(2) - b(2), a(2) - c(2), a(2) - ray.direction()(2)
         };
 
         coordinate_type dA = determinant(A);
