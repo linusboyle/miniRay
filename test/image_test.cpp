@@ -21,12 +21,18 @@ TEST_CASE ("image can be manipulated correctly", "[image]") {
     }
 
     SECTION("Image can create real image file correctly") {
-        img.writeout("blackbg.png");
         fs::path rendered_path_png = "./blackbg.png";
+        if (fs::exists(rendered_path_png)) {
+            fs::remove(rendered_path_png);
+        }
+        img.writeout("blackbg.png");
         REQUIRE(fs::exists(rendered_path_png));
 
+        fs::path rendered_path_ppm= "./blackbg.ppm";
+        if (fs::exists(rendered_path_ppm)) {
+            fs::remove(rendered_path_ppm);
+        }
         img.writeout("blackbg.ppm");
-        fs::path rendered_path_ppm= "./blackbg.png";
         REQUIRE(fs::exists(rendered_path_ppm));
     }
 
@@ -43,10 +49,22 @@ TEST_CASE ("image can be manipulated correctly", "[image]") {
     SECTION("Anti aliasing line drawing in all directions") {
         img.fillcolor({255, 255, 255});
         img.setAntialiasing();
+
         img.drawline(200, 200, 500, 450, {0, 0, 0});
         img.drawline(200, 200, 500, 10, {0, 0, 0});
         img.drawline(200, 200, 10, 500, {0, 0, 0});
         img.drawline(200, 200, 30, 10, {0, 0, 0});
+
+        img.show();
+    }
+    SECTION("Anti aliasing line drawing is correct with intersection") {
+        img.fillcolor({255, 255, 255});
+        img.setAntialiasing();
+
+        // a triangle
+        img.drawline(90, 230, 400, 390, {0, 0, 0});
+        img.drawline(20, 300, 400, 39, {0, 0, 0});
+        img.drawline(300, 20, 370, 400, {0, 0, 0});
 
         img.show();
     }
