@@ -10,6 +10,12 @@ static constexpr graphics::coordinate_type epsilon = 0.01;
 
 namespace graphics {
 
+    Scene::~Scene()  {
+        for (auto ptr : objects) {
+            delete ptr;
+        }
+    }
+
     std::optional<coordinate_type> Scene::hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) {
         bool hit = false;
         for (auto obj : objects) {

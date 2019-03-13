@@ -22,7 +22,7 @@ namespace graphics {
             std::size_t i = 0;
             while (begin != end) {
                 if (i >= ROWS * COLUMNS) {
-                    throw std::logic_error("number of matrix elements is wrong!");
+                    throw std::length_error("number of matrix elements is wrong!");
                 }
                 matrix_[i++] = *begin;
                 begin++;

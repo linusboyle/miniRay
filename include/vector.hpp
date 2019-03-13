@@ -11,12 +11,6 @@ namespace graphics {
     using Vector2 = basic_vector<2>;
     using Vector3 = basic_vector<3>;
 
-    template <std::size_t Index, std::size_t Dimension>
-    inline auto get(const basic_vector<Dimension>& v) {
-        static_assert(Index < Dimension);
-        return v(Index, 0);
-    }
-
     template <std::size_t Dimension>
     auto scalarProduct(const basic_vector<Dimension>& lhs, const basic_vector<Dimension>& rhs) {
         coordinate_type retval = 0.0;

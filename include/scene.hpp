@@ -42,6 +42,8 @@ namespace graphics {
         void setPhongExponent(coordinate_type exponent) {
             phongExponent = exponent;
         }
+
+        ~Scene();
     };
 }
 #endif /* ifndef SCENE_HPP */
