@@ -33,7 +33,7 @@ namespace graphics {
 
         // NOTE: this function is meaningless for a plane
         virtual Vector3 gradient(const Point& position) const override;
-        virtual ~Plane() {}
+        virtual ~Plane() override {}
 
         // set ref point manually
         void setRefPoint(const Point& p) { referrence_point = p; }
