@@ -69,12 +69,13 @@ namespace graphics {
         };
 
         Matrix<3,3> A {
-            a(0) - b(0), a(0) - c(0), a(0) - ray.direction()(0),
-            a(1) - b(1), a(1) - c(1), a(1) - ray.direction()(1),
-            a(2) - b(2), a(2) - c(2), a(2) - ray.direction()(2)
+            a(0) - b(0), a(0) - c(0), ray.direction()(0),
+            a(1) - b(1), a(1) - c(1), ray.direction()(1),
+            a(2) - b(2), a(2) - c(2), ray.direction()(2)
         };
 
         coordinate_type dA = determinant(A);
+
         //const coordinate_type a_ = get<0>(a) - get<0>(b);
         //const coordinate_type b_ = get<1>(a) - get<1>(b);
         //const coordinate_type c_ = get<2>(a) - get<2>(b);
@@ -102,10 +103,9 @@ namespace graphics {
         //coordinate_type beta = (j_ * ei_hf + k_ * gf_di + l_ * dh_eg) / M;
         //coordinate_type gamma = (i_ * ak_jb + h_ * jc_al + g_ * bl_kc) / M;
 
-
-        const coordinate_type t = determinant(m1) / dA;
-        const coordinate_type beta = determinant(m2) / dA;
-        const coordinate_type gamma = determinant(m3) / dA;
+        const coordinate_type beta = determinant(m1) / dA;
+        const coordinate_type gamma = determinant(m2) / dA;
+        const coordinate_type t = determinant(m3) / dA;
 
         return std::make_tuple(t, beta, gamma);
     }
