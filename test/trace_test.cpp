@@ -14,6 +14,8 @@ TEST_CASE ("ray and object intersection computed correctly", "[ray]") {
     Ray ray(Point{1.0, 1.0, 1.0}, Vector3{-1.0, -1.0, -1.0});
     auto result = sphere->hit(ray, 0, std::numeric_limits<coordinate_type>::max());
     REQUIRE(result);
+    REQUIRE(result.value() - 0.42265 < std::numeric_limits<coordinate_type>::epsilon());
+    REQUIRE(0.42265 - result.value() > std::numeric_limits<coordinate_type>::epsilon());
 }
 
 TEST_CASE("the ray tracing main function works correctly", "[ray]") {
