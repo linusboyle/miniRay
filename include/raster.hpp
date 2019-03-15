@@ -1,3 +1,6 @@
+#ifndef RASTER_HPP
+#define RASTER_HPP
+
 namespace graphics {
     class Image;
     class RGBColor;
@@ -8,3 +11,5 @@ namespace graphics {
         void XiaolinWuLine(Image& img, int x1, int y1, int x2, int y2, const RGBColor& color);
     }
 }
+
+#endif
