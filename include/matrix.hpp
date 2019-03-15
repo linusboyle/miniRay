@@ -2,8 +2,7 @@
 #define MATRIX_HPP
 
 #include "base_matrix.hpp"
-#include "config.hpp"
-
+#include "type.hpp" 
 #include <ostream>
 
 namespace graphics {

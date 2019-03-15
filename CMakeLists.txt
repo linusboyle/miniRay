@@ -2,7 +2,15 @@ cmake_minimum_required(VERSION 3.2)
 
 project(graphics)
 
-include_directories(include)
+configure_file(
+    "${PROJECT_SOURCE_DIR}/cmake/config.h.in"
+    "${PROJECT_BINARY_DIR}/config.h"
+    )
+
+option(USE_FLOAT
+    "use float in computing" OFF)
+
+include_directories(include ${PROJECT_BINARY_DIR})
 add_compile_options(-Wall -Wextra)
 
 add_subdirectory(src)
