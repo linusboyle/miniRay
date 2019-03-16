@@ -40,6 +40,8 @@ namespace graphics {
         return v / modulus;
     }
 
+    Vector3 solve(const Matrix<3, 3>& lhs, const Vector3& rhs);
+
     using Point = Vector3;
 }
 #endif /* ifndef VECTOR_HPP */
