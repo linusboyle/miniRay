@@ -7,11 +7,17 @@ namespace graphics {
     template <std::size_t ROWS, std::size_t COLUMNS, typename T>
     class base_matrix {
 
+    public:
         static_assert(COLUMNS > 0);
         static_assert(ROWS > 0);
         static_assert(std::is_arithmetic<T>::value);
 
-        T matrix_[ROWS * COLUMNS];
+        static constexpr std::size_t size = ROWS * COLUMNS;
+        static constexpr std::size_t rlength = ROWS;
+        static constexpr std::size_t clength = COLUMNS;
+
+    private:
+        T matrix_[size];
 
     public:
         base_matrix() {}
@@ -21,7 +27,7 @@ namespace graphics {
             // TODO: need some refactor
             std::size_t i = 0;
             while (begin != end) {
-                if (i >= ROWS * COLUMNS) {
+                if (i >= size) {
                     throw std::length_error("number of matrix elements is wrong!");
                 }
                 matrix_[i++] = *begin;
@@ -31,7 +37,7 @@ namespace graphics {
 
         template <typename... EList, std::enable_if_t<meta::nonarrow_convertible<T, EList...>::value, bool> = true>
         explicit base_matrix(EList&&... es): matrix_{std::forward<EList>(es)...} {
-            static_assert(sizeof...(es) == ROWS * COLUMNS, "elements number does not match the size of the matrix!");
+            static_assert(sizeof...(es) == size, "elements number does not match the size of the matrix!");
         }
 
         T& getElement(std::size_t row, std::size_t column) {
