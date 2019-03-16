@@ -38,7 +38,7 @@ namespace graphics {
         }
 
         const auto result = solution(ray);
-        const coordinate_type t = std::get<0>(result);
+        const coordinate_type t = result.getElement(2, 0);
 
         if (t <= upperbound && t > lowerbound) {
             referrence_point = ray.source();
@@ -48,65 +48,17 @@ namespace graphics {
         }
     }
 
-    std::tuple<coordinate_type, coordinate_type, coordinate_type> Plane::solution(const Ray& ray) {
+    Vector3 Plane::solution(const Ray& ray) {
 
-        Matrix<3,3> m1 {
-            a(0) - ray.source()(0), a(0) - c(0), ray.direction()(0),
-            a(1) - ray.source()(1), a(1) - c(1), ray.direction()(1),
-            a(2) - ray.source()(2), a(2) - c(2), ray.direction()(2)
-        };
-
-        Matrix<3,3> m2 {
-            a(0) - b(0), a(0) - ray.source()(0), ray.direction()(0),
-            a(1) - b(1), a(1) - ray.source()(1), ray.direction()(1),
-            a(2) - b(2), a(2) - ray.source()(2), ray.direction()(2)
-        };
-
-        Matrix<3,3> m3 {
-            a(0) - b(0), a(0) - c(0), a(0)- ray.source()(0),
-            a(1) - b(1), a(1) - c(1), a(1)- ray.source()(1),
-            a(2) - b(2), a(2) - c(2), a(2)- ray.source()(2)
-        };
-
-        Matrix<3,3> A {
+        const Matrix<3,3> A {
             a(0) - b(0), a(0) - c(0), ray.direction()(0),
             a(1) - b(1), a(1) - c(1), ray.direction()(1),
             a(2) - b(2), a(2) - c(2), ray.direction()(2)
         };
 
-        coordinate_type dA = determinant(A);
+        const auto result = solve(A, a - ray.source());
 
-        //const coordinate_type a_ = get<0>(a) - get<0>(b);
-        //const coordinate_type b_ = get<1>(a) - get<1>(b);
-        //const coordinate_type c_ = get<2>(a) - get<2>(b);
-        //const coordinate_type d_ = get<0>(a) - get<0>(c);
-        //const coordinate_type e_ = get<1>(a) - get<1>(c);
-        //const coordinate_type f_ = get<2>(a) - get<2>(c);
-
-        //const coordinate_type g_ = get<0>(ray.direction());
-        //const coordinate_type h_ = get<1>(ray.direction());
-        //const coordinate_type i_ = get<2>(ray.direction());
-
-        //const coordinate_type j_ = get<0>(a) - get<0>(ray.source());
-        //const coordinate_type k_ = get<1>(a) - get<1>(ray.source());
-        //const coordinate_type l_ = get<2>(a) - get<2>(ray.source());
-
-        //const coordinate_type ei_hf = e_ * i_ - h_ * f_;
-        //const coordinate_type gf_di = g_ * f_ - d_ * i_;
-        //const coordinate_type dh_eg = d_ * h_ - e_ * g_;
-        //const coordinate_type ak_jb = a_ * k_ - j_ * b_;
-        //const coordinate_type jc_al = j_ * c_ - a_ * l_;
-        //const coordinate_type bl_kc = b_ * l_ - k_ * c_;
-        //const coordinate_type M = a_ * ei_hf + b_ * gf_di + c_ * dh_eg;
-
-        //coordinate_type t = (f_ * ak_jb + e_ * jc_al + d_ * bl_kc) / -M;
-        //coordinate_type beta = (j_ * ei_hf + k_ * gf_di + l_ * dh_eg) / M;
-        //coordinate_type gamma = (i_ * ak_jb + h_ * jc_al + g_ * bl_kc) / M;
-
-        const coordinate_type beta = determinant(m1) / dA;
-        const coordinate_type gamma = determinant(m2) / dA;
-        const coordinate_type t = determinant(m3) / dA;
-
-        return std::make_tuple(t, beta, gamma);
+        // the three elements are beta, gamma, t respectively
+        return result;
     }
 }

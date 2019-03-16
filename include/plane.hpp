@@ -2,7 +2,7 @@
 #define PLANE_HPP
 
 #include "surface.hpp"
-#include <tuple>
+#include "vector.hpp"
 
 namespace graphics {
     class Plane : public Surface {
@@ -15,8 +15,7 @@ namespace graphics {
         // is 'positive'
         // this point should not be on the plane
         Point referrence_point;
-
-        std::tuple<coordinate_type, coordinate_type, coordinate_type> solution(const Ray& ray);
+        Vector3 solution(const Ray& ray);
 
         // helper function
         Vector3 normal() const;
