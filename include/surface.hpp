@@ -31,7 +31,5 @@ namespace graphics {
         virtual BoundingBox boundingbox() const = 0;
         virtual Vector3 gradient(const Point& position) const = 0;
     };
-    
-    inline Surface::~Surface() {}
 }
 #endif /* ifndef SURFACE_CPP */
