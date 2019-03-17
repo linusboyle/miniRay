@@ -1,5 +1,5 @@
 #include "image.hpp"
-#include "raster.hpp"
+#include "raster/algorithm.hpp"
 #include "color.hpp"
 
 namespace graphics {

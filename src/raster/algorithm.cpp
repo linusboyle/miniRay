@@ -1,4 +1,4 @@
-#include "raster.hpp"
+#include "raster/algorithm.hpp"
 #include "image.hpp"
 #include "color.hpp"
 #include <cmath>
