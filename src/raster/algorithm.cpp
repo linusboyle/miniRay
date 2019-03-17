@@ -170,7 +170,7 @@ namespace graphics::raster {
         auto startP = *polygot.list.rbegin();
 
         for (const auto& endP : polygot.list) {
-            bresenham(img, startP(0), startP(1), endP(0), endP(1), color);
+            XiaolinWuLine(img, startP(0), startP(1), endP(0), endP(1), color);
             startP = endP;
         }
     }

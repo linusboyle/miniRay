@@ -1,5 +1,6 @@
 #include "image.hpp"
 #include "raster/algorithm.hpp"
+#include "raster/pointlist.hpp"
 #include "color.hpp"
 
 namespace graphics {
@@ -18,6 +19,12 @@ namespace graphics {
 
     void Image::fillcolor(const RGBColor& color) {
         rgb_.setTo(cv::Scalar(color.b(), color.g(), color.r()));
+    }
+
+    void Image::drawpoints(const raster::PointList &points, const RGBColor &color) {
+        for (const auto& point : points.list) {
+            this->setpixel(point(0), point(1), color);
+        }
     }
 
     void Image::writeout(const char* filename) const {
@@ -45,7 +52,7 @@ namespace graphics {
         raster::bresenham_circle(*this, x, y, radius, color);
     }
 
-    void Image::drawpolygot(const raster::PointList &points, const RGBColor &color) {
-        raster::rasterize(*this, points, color);
+    void Image::drawpolygon(const raster::Polygon& polygon, const RGBColor &color) {
+        raster::rasterize(*this, polygon, color);
     }
 }

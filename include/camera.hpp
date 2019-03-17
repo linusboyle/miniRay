@@ -4,6 +4,7 @@
 #include "ray.hpp"
 
 namespace graphics {
+
     // a orthographic perspective camera is such an object: 
     // a 3d-rectangle w x h and 
     // a viewpoint e

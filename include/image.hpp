@@ -6,6 +6,8 @@
 namespace graphics {
     namespace raster {
         class PointList;
+
+        using Polygon = PointList;
     };
 
     class RGBColor;
@@ -37,9 +39,10 @@ namespace graphics {
         /*
          * rendering
          */
+        void drawpoints(const raster::PointList& points, const RGBColor& color);
         void drawline(int x1, int y1, int x2, int y2, const RGBColor& color);
         void drawcircle(int x, int y, int radius, const RGBColor& color);
-        void drawpolygot(const raster::PointList& points, const RGBColor& color);
+        void drawpolygon(const raster::Polygon& polygon, const RGBColor& color);
 
         /* image IO*/
         void writeout(const char* filename) const;
