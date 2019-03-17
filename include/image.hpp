@@ -4,6 +4,10 @@
 #include <opencv2/opencv.hpp>
 
 namespace graphics {
+    namespace raster {
+        class PointList;
+    };
+
     class RGBColor;
 
     class Image {
@@ -35,6 +39,7 @@ namespace graphics {
          */
         void drawline(int x1, int y1, int x2, int y2, const RGBColor& color);
         void drawcircle(int x, int y, int radius, const RGBColor& color);
+        void drawpolygot(const raster::PointList& points, const RGBColor& color);
 
         /* image IO*/
         void writeout(const char* filename) const;

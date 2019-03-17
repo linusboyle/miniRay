@@ -44,4 +44,8 @@ namespace graphics {
         }
         raster::bresenham_circle(*this, x, y, radius, color);
     }
+
+    void Image::drawpolygot(const raster::PointList &points, const RGBColor &color) {
+        raster::rasterize(*this, points, color);
+    }
 }

@@ -1,4 +1,5 @@
 #include "raster/algorithm.hpp"
+#include "raster/pointlist.hpp"
 #include "image.hpp"
 #include "color.hpp"
 #include <cmath>
@@ -51,8 +52,8 @@ namespace graphics::raster {
         int deltax = std::abs(x1 - x2);
         int deltay = std::abs(y1 - y2);
 
-        const int stepx = x1 < x2 ? 1 : -1;
-        const int stepy = y1 < y2 ? 1 : -1;
+        const int stepx = x1 < x2 ? 1 : x1 == x2 ? 0 : -1;
+        const int stepy = y1 < y2 ? 1 : y1 == y2 ? 0 : -1;
 
         bool steep = false;
         if (deltay > deltax) {
@@ -62,7 +63,7 @@ namespace graphics::raster {
 
         int deviation = (deltay << 1) + deltax;
 
-        for (int i = 0; i < deltax; ++i) {
+        for (int i = 0; i <= deltax; ++i) {
             img.setpixel(x1, y1, color);
 
             if (deviation > 0) {
@@ -161,6 +162,15 @@ namespace graphics::raster {
                 img.setpixel(x, pos + 1, fractional * color + (1.0 - fractional) * bgColor);
                 deviation += gradient;
             }
+        }
+    }
+
+    void rasterize(Image &img, const PointList& polygot, RGBColor color) {
+        auto startP = *polygot.list.rbegin();
+
+        for (const auto& endP : polygot.list) {
+            bresenham(img, startP(0), startP(1), endP(0), endP(1), color);
+            startP = endP;
         }
     }
 }
