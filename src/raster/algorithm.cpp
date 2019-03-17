@@ -61,10 +61,18 @@ namespace graphics::raster {
             steep = true;
         }
 
-        int deviation = (deltay << 1) + deltax;
+        int deviation = - deltax;
 
         for (int i = 0; i <= deltax; ++i) {
             img.setpixel(x1, y1, color);
+
+            if (steep) {
+                y1 += stepy;
+            } else {
+                x1 += stepx;
+            }
+
+            deviation += deltay << 1;
 
             if (deviation > 0) {
                 if (steep) {
@@ -76,13 +84,6 @@ namespace graphics::raster {
                 deviation -= deltax << 1;
             }
 
-            if (steep) {
-                y1 += stepy;
-            } else {
-                x1 += stepx;
-            }
-
-            deviation += deltay << 1;
         }
     }
 

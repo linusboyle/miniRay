@@ -76,7 +76,9 @@ TEST_CASE ("image can be manipulated correctly", "[image]") {
         img.fillcolor({255, 255, 255});
 
         raster::PointList points;
-        points << Point2dR{10, 10} << Point2dR{10, 200} << Point2dR{200, 200} << Point2dR{200, 10};
+        // points << Point2dR{10, 10} << Point2dR{10, 200} << Point2dR{200, 200} << Point2dR{200, 10};
+        points << Point2dR{30, 10} << Point2dR{20, 300} << Point2dR{400, 300}
+               << Point2dR{390, 10} << Point2dR{210, 200};
 
         img.drawpolygot(points, {0, 0, 0});
 
