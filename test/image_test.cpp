@@ -1,6 +1,7 @@
 #include "catch.hpp"
 #include "image.hpp"
 #include "color.hpp"
+#include "raster/pointlist.hpp"
 
 using namespace graphics;
 
@@ -38,6 +39,7 @@ TEST_CASE ("image can be manipulated correctly", "[image]") {
 
     SECTION("Image draws line correctly in all directions") {
         img.fillcolor({255, 255, 255});
+        img.drawline(200, 200, 200, 100, {0, 0, 0});
         img.drawline(200, 200, 500, 450, {0, 0, 0});
         img.drawline(200, 200, 500, 10, {0, 0, 0});
         img.drawline(200, 200, 10, 500, {0, 0, 0});
@@ -57,6 +59,7 @@ TEST_CASE ("image can be manipulated correctly", "[image]") {
 
         img.show();
     }
+
     SECTION("Anti aliasing line drawing is correct with intersection") {
         img.fillcolor({255, 255, 255});
         img.setAntialiasing();
@@ -65,6 +68,17 @@ TEST_CASE ("image can be manipulated correctly", "[image]") {
         img.drawline(90, 230, 400, 390, {0, 0, 0});
         img.drawline(20, 300, 400, 39, {0, 0, 0});
         img.drawline(300, 20, 370, 400, {0, 0, 0});
+
+        img.show();
+    }
+
+    SECTION("polygot drawn correctly") {
+        img.fillcolor({255, 255, 255});
+
+        raster::PointList points;
+        points << Point2dR{10, 10} << Point2dR{10, 200} << Point2dR{200, 200} << Point2dR{200, 10};
+
+        img.drawpolygot(points, {0, 0, 0});
 
         img.show();
     }
