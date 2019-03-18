@@ -1,7 +1,6 @@
 #include "catch.hpp"
 
 #include "image.hpp"
-#include "color.hpp"
 #include "scene.hpp"
 #include "camera.hpp"
 #include "sphere.hpp"

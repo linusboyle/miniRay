@@ -2,6 +2,7 @@
 #define IMAGE_CPP
 
 #include <opencv2/opencv.hpp>
+#include "color.hpp"
 
 namespace graphics {
     namespace raster {
@@ -9,8 +10,6 @@ namespace graphics {
 
         using Polygon = PointList;
     };
-
-    class RGBColor;
 
     class Image {
 
@@ -33,7 +32,7 @@ namespace graphics {
          * color
          */
         void setpixel(int x, int y, const RGBColor& color);
-        RGBColor&& getpixel(int x, int y) const;
+        RGBColor getpixel(int x, int y) const;
         void fillcolor(const RGBColor& color);
 
         /*

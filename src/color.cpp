@@ -2,44 +2,44 @@
 
 namespace graphics {
     RGBColor operator+ (const RGBColor& lhs, const RGBColor& rhs) {
-        double R = lhs.R + rhs.R;
-        if (R > 1.0)
-            R = 1.0;
-        double G = lhs.G + rhs.G;
-        if (G > 1.0)
-            G = 1.0;
-        double B = lhs.B + rhs.B;
-        if (B > 1.0)
-            B = 1.0;
+        double r_ = lhs.R + rhs.R;
+        if (r_ > 1.0)
+            r_ = 1.0;
+        double g_ = lhs.G + rhs.G;
+        if (g_ > 1.0)
+            g_ = 1.0;
+        double b_ = lhs.B + rhs.B;
+        if (b_ > 1.0)
+            b_ = 1.0;
 
-        return {R, G, B};
+        return {r_, g_, b_};
     }
 
     RGBColor operator- (const RGBColor& lhs, const RGBColor& rhs) {
-        double R = lhs.R - rhs.R;
-        if (R < 0.0)
-            R = 0.0;
-        double G = lhs.G - rhs.G;
-        if (G < 0.0)
-            G = 0.0;
-        double B = lhs.B - rhs.B;
-        if (B < 0.0)
-            B = 0.0;
+        double r_ = lhs.R - rhs.R;
+        if (r_ < 0.0)
+            r_ = 0.0;
+        double g_ = lhs.G - rhs.G;
+        if (g_ < 0.0)
+            g_ = 0.0;
+        double b_ = lhs.B - rhs.B;
+        if (b_ < 0.0)
+            b_ = 0.0;
 
-        return {R, G, B};
+        return {r_, g_, b_};
     }
 
     RGBColor operator*(double lhs, const RGBColor& rhs) {
-        double R = lhs * rhs.R;
-        if (R > 1.0)
-            R = 1.0;
-        double G = lhs * rhs.G;
-        if (G > 1.0)
-            G = 1.0;
-        double B = lhs * rhs.B;
-        if (B > 1.0)
-            B = 1.0;
+        double r_ = lhs * rhs.R;
+        if (r_ > 1.0)
+            r_ = 1.0;
+        double g_ = lhs * rhs.G;
+        if (g_ > 1.0)
+            g_ = 1.0;
+        double b_ = lhs * rhs.B;
+        if (b_ > 1.0)
+            b_ = 1.0;
 
-        return {R, G, B};
+        return {r_, g_, b_};
     }
 }

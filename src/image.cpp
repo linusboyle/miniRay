@@ -1,7 +1,6 @@
 #include "image.hpp"
 #include "raster/algorithm.hpp"
 #include "raster/pointlist.hpp"
-#include "color.hpp"
 
 namespace graphics {
     void Image::setpixel(int x, int y, const RGBColor& color) {
@@ -11,10 +10,10 @@ namespace graphics {
         val.val[2] = color.r();
     }
 
-    RGBColor&& Image::getpixel(int x, int y) const {
+    RGBColor Image::getpixel(int x, int y) const {
         auto& val = rgb_.at<cv::Vec3b>(y, x);
         RGBColor retval{val.val[2], val.val[1], val.val[0]};
-        return std::move(retval);
+        return retval;
     }
 
     void Image::fillcolor(const RGBColor& color) {
@@ -49,7 +48,12 @@ namespace graphics {
         if (x < radius || x >= width_ - radius || y < radius || y >= height_ - radius) {
             throw std::invalid_argument("the circle contains part that's outside the image; cropping has not been implemented yet!");
         }
-        raster::BresenhamCircle(*this, x, y, radius, color);
+
+        if (use_antialiasing) {
+            raster::XiaolinWuCircle(*this, x, y, radius, color);
+        } else {
+            raster::BresenhamCircle(*this, x, y, radius, color);
+        }
     }
 
     void Image::drawpolygon(const raster::Polygon& polygon, const RGBColor &color) {

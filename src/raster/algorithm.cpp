@@ -1,7 +1,6 @@
 #include "raster/algorithm.hpp"
 #include "raster/pointlist.hpp"
 #include "image.hpp"
-#include "color.hpp"
 #include <cmath>
 
 static inline double fpart(double number) {
@@ -18,6 +17,10 @@ static inline int ipart(double number) {
 }
 
 namespace graphics::raster {
+
+    /*
+     * helper function used in drawing symmetric shapes
+     */
     static inline void drawpixel4(Image& img, int centerx, int centery, int x, int y, const RGBColor& color) {
         //            |
         //    (-x, y) |  (x, y)
@@ -27,11 +30,21 @@ namespace graphics::raster {
         //            |
         //            |
         img.setpixel(centerx + x, centery + y, color);
-        img.setpixel(centerx + x, centery - y, color);
-        img.setpixel(centerx - x, centery + y, color);
         img.setpixel(centerx - x, centery - y, color);
+
+        if (y != 0)
+            img.setpixel(centerx + x, centery - y, color);
+        if (x != 0)
+            img.setpixel(centerx - x, centery + y, color);
     }
 
+    static inline void drawpixel8(Image& img, int centerx, int centery, int x, int y, const RGBColor& color) {
+        drawpixel4(img, centerx, centery, x, y, color);
+        if (x != y) // don't draw the pixels twice
+            drawpixel4(img, centerx, centery, y, x, color);
+    }
+
+    // some utils, convenient for human eyes
     static inline void moveRight(int& x, int&, int& deviation) {
         x++;
         deviation += (x << 1) + 1;
@@ -156,8 +169,8 @@ namespace graphics::raster {
 
                 // these two are original colors of the accroding pixels
                 // which will be mixed later
-                const RGBColor bgColor = img.getpixel(ypos, x);
-                const RGBColor bgColor2 = img.getpixel(ypos + 1, x);
+                RGBColor&& bgColor = img.getpixel(ypos, x);
+                RGBColor&& bgColor2 = img.getpixel(ypos + 1, x);
 
                 img.setpixel(ypos, x, (1.0 - fractional) * color + fractional * bgColor);
                 img.setpixel(ypos + 1, x, fractional * color + (1.0 - fractional) * bgColor2);
@@ -169,8 +182,8 @@ namespace graphics::raster {
                 const int pos = ipart(deviation);
                 const double fractional = fpart(deviation);
 
-                const RGBColor bgColor = img.getpixel(x, pos);
-                const RGBColor bgColor2 = img.getpixel(x, pos + 1);
+                RGBColor&& bgColor = img.getpixel(x, pos);
+                RGBColor&& bgColor2 = img.getpixel(x, pos + 1);
 
                 img.setpixel(x, pos, (1.0 - fractional) * color + fractional * bgColor);
                 img.setpixel(x, pos + 1, fractional * color + (1.0 - fractional) * bgColor2);
@@ -185,6 +198,25 @@ namespace graphics::raster {
         for (const auto& endP : polygon.list) {
             XiaolinWuLine(img, startP(0), startP(1), endP(0), endP(1), color);
             startP = endP;
+        }
+    }
+
+    // draw a circle with anti aliasing
+    // NOTE: not for drawing ellipse
+    void XiaolinWuCircle(Image& img, int centerx, int centery, int radius, const RGBColor& color) {
+        double x = radius;
+
+        for (int y = 0; y < x; ++y) {
+            x = std::sqrt(radius * radius - y * y);
+
+            double fractional = fpart(x);
+            int xpos = ipart(x);
+
+            RGBColor&& bgColor = img.getpixel(xpos, y);
+            RGBColor&& bgColor2 = img.getpixel(xpos + 1, y);
+
+            drawpixel8(img, centerx, centery, xpos, y, (1.0 - fractional) * color  + fractional * bgColor);
+            drawpixel8(img, centerx, centery, xpos + 1, y, fractional * color + (1.0 - fractional) * bgColor2);
         }
     }
 }

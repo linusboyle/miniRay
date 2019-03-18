@@ -1,6 +1,5 @@
 #include "catch.hpp"
 #include "image.hpp"
-#include "color.hpp"
 #include "raster/pointlist.hpp"
 
 using namespace graphics;
@@ -44,6 +43,20 @@ TEST_CASE ("image can be manipulated correctly", "[image]") {
         img.drawline(200, 200, 500, 10, {0, 0, 0});
         img.drawline(200, 200, 10, 500, {0, 0, 0});
         img.drawline(200, 200, 30, 10, {0, 0, 0});
+
+        img.show();
+    }
+
+    SECTION("draw circle correctly") {
+        img.fillcolor({255, 255, 255});
+        img.drawcircle(200, 200, 100, {0, 0, 0});
+        img.show();
+    }
+
+    SECTION("draw circle with anti aliasing correctly") {
+        img.fillcolor({255, 255, 255});
+        img.setAntialiasing();
+        img.drawcircle(200, 200, 100, {0, 0, 0});
 
         img.show();
     }
