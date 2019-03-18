@@ -210,13 +210,17 @@ namespace graphics::raster {
             x = std::sqrt(radius * radius - y * y);
 
             double fractional = fpart(x);
+
             int xpos = ipart(x);
 
-            RGBColor&& bgColor = img.getpixel(xpos, y);
-            RGBColor&& bgColor2 = img.getpixel(xpos + 1, y);
+            RGBColor bgColor = img.getpixel(centerx + xpos, centery + y);
+            RGBColor bgColor2 = img.getpixel(centerx + xpos + 1, centery + y);
 
-            drawpixel8(img, centerx, centery, xpos, y, (1.0 - fractional) * color  + fractional * bgColor);
-            drawpixel8(img, centerx, centery, xpos + 1, y, fractional * color + (1.0 - fractional) * bgColor2);
+            RGBColor newcolor = (1.0 - fractional) * color  + fractional * bgColor;
+            RGBColor newcolor2 = fractional * color + (1.0 - fractional) * bgColor2;
+
+            drawpixel8(img, centerx, centery, xpos, y, newcolor);
+            drawpixel8(img, centerx, centery, xpos + 1, y, newcolor2);
         }
     }
 }

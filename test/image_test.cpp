@@ -56,7 +56,10 @@ TEST_CASE ("image can be manipulated correctly", "[image]") {
     SECTION("draw circle with anti aliasing correctly") {
         img.fillcolor({255, 255, 255});
         img.setAntialiasing();
-        img.drawcircle(200, 200, 100, {0, 0, 0});
+
+        img.drawcircle(100, 100, 70, {0, 0, 0});
+        img.drawcircle(240, 110, 50, {120, 90, 114});
+        img.drawcircle(150, 210, 100, {240, 100, 78});
 
         img.show();
     }
