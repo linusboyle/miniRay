@@ -41,7 +41,7 @@ namespace graphics {
         if (use_antialiasing) {
             raster::XiaolinWuLine(*this, x1, y1, x2, y2, color);
         } else {
-            raster::bresenham(*this, x1, y1, x2, y2, color);
+            raster::BresenhamLine(*this, x1, y1, x2, y2, color);
         }
     }
 
@@ -49,7 +49,7 @@ namespace graphics {
         if (x < radius || x >= width_ - radius || y < radius || y >= height_ - radius) {
             throw std::invalid_argument("the circle contains part that's outside the image; cropping has not been implemented yet!");
         }
-        raster::bresenham_circle(*this, x, y, radius, color);
+        raster::BresenhamCircle(*this, x, y, radius, color);
     }
 
     void Image::drawpolygon(const raster::Polygon& polygon, const RGBColor &color) {

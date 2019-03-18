@@ -48,7 +48,7 @@ namespace graphics::raster {
         deviation += ((x - y) << 1) + 2;
     }
 
-    void bresenham(Image& img, int x1, int y1, int x2, int y2, const RGBColor& color) {
+    void BresenhamLine(Image& img, int x1, int y1, int x2, int y2, const RGBColor& color) {
         int deltax = std::abs(x1 - x2);
         int deltay = std::abs(y1 - y2);
 
@@ -87,7 +87,7 @@ namespace graphics::raster {
         }
     }
 
-    void bresenham_circle(Image& img, int centerx, int centery, int radius, const RGBColor& color) {
+    void BresenhamCircle(Image& img, int centerx, int centery, int radius, const RGBColor& color) {
         // start from (0,r) to (r,0)
         int offset_x = 0;
         int offset_y = radius;
@@ -147,29 +147,42 @@ namespace graphics::raster {
 
         if (steep) {
             for (int x = x1; x <= x2; ++x) {
-                const int pos = ipart(deviation);
+                // divide the opacity:
+                // fractional is the opacity of (ypos, x); 1 - fractional for (ypos + 1, x)
+                // 1 means fully transparent
+                // 0 means pure color
+                const int ypos = ipart(deviation);
                 const double fractional = fpart(deviation);
-                const RGBColor bgColor = img.getpixel(pos + 1, x);
-                img.setpixel(pos, x, (1.0 - fractional) * color + fractional * bgColor);
-                img.setpixel(pos + 1, x, fractional * color + (1.0 - fractional) * bgColor);
+
+                // these two are original colors of the accroding pixels
+                // which will be mixed later
+                const RGBColor bgColor = img.getpixel(ypos, x);
+                const RGBColor bgColor2 = img.getpixel(ypos + 1, x);
+
+                img.setpixel(ypos, x, (1.0 - fractional) * color + fractional * bgColor);
+                img.setpixel(ypos + 1, x, fractional * color + (1.0 - fractional) * bgColor2);
                 deviation += gradient;
             }
         } else {
             for (int x = x1; x <= x2; ++x) {
+                // likewise
                 const int pos = ipart(deviation);
                 const double fractional = fpart(deviation);
-                const RGBColor bgColor = img.getpixel(x, pos + 1);
+
+                const RGBColor bgColor = img.getpixel(x, pos);
+                const RGBColor bgColor2 = img.getpixel(x, pos + 1);
+
                 img.setpixel(x, pos, (1.0 - fractional) * color + fractional * bgColor);
-                img.setpixel(x, pos + 1, fractional * color + (1.0 - fractional) * bgColor);
+                img.setpixel(x, pos + 1, fractional * color + (1.0 - fractional) * bgColor2);
                 deviation += gradient;
             }
         }
     }
 
-    void rasterize(Image &img, const PointList& polygot, RGBColor color) {
-        auto startP = *polygot.list.rbegin();
+    void rasterize(Image& img, const PointList& polygon, RGBColor color) {
+        auto startP = *polygon.list.rbegin();
 
-        for (const auto& endP : polygot.list) {
+        for (const auto& endP : polygon.list) {
             XiaolinWuLine(img, startP(0), startP(1), endP(0), endP(1), color);
             startP = endP;
         }
