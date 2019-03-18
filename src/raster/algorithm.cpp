@@ -213,11 +213,11 @@ namespace graphics::raster {
 
             int xpos = ipart(x);
 
-            RGBColor bgColor = img.getpixel(centerx + xpos, centery + y);
-            RGBColor bgColor2 = img.getpixel(centerx + xpos + 1, centery + y);
+            RGBColor&& bgColor = img.getpixel(centerx + xpos, centery + y);
+            RGBColor&& bgColor2 = img.getpixel(centerx + xpos + 1, centery + y);
 
-            RGBColor newcolor = (1.0 - fractional) * color  + fractional * bgColor;
-            RGBColor newcolor2 = fractional * color + (1.0 - fractional) * bgColor2;
+            RGBColor&& newcolor = (1.0 - fractional) * color  + fractional * bgColor;
+            RGBColor&& newcolor2 = fractional * color + (1.0 - fractional) * bgColor2;
 
             drawpixel8(img, centerx, centery, xpos, y, newcolor);
             drawpixel8(img, centerx, centery, xpos + 1, y, newcolor2);
