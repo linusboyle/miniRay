@@ -42,4 +42,14 @@ namespace graphics {
 
         return {r_, g_, b_};
     }
+
+    bool operator==(const RGBColor &lhs, const RGBColor &rhs) {
+        // almost equal
+        if (lhs.r() == rhs.r() && lhs.b() == rhs.b() && lhs.g() == rhs.g()) {
+            return true;
+        }
+
+        return false;
+    }
+
 }

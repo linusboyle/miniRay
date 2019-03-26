@@ -25,5 +25,6 @@ namespace graphics {
         friend RGBColor operator* (double lhs, const RGBColor& rhs);
     };
 
+    bool operator==(const RGBColor& lhs, const RGBColor& rhs);
 }
 #endif /* ifndef COLOR_HPP */
