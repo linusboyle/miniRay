@@ -196,7 +196,7 @@ namespace graphics::raster {
         auto startP = *polygon.list.rbegin();
 
         for (const auto& endP : polygon.list) {
-            XiaolinWuLine(img, startP(0), startP(1), endP(0), endP(1), color);
+            img.drawline(startP(0), startP(1), endP(0), endP(1), color);
             startP = endP;
         }
     }

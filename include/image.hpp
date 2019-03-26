@@ -19,6 +19,8 @@ namespace graphics {
         int height_;
         bool use_antialiasing;
 
+        bool outside(int x, int y) const;
+
     public:
 
         Image(int width, int height)
@@ -33,7 +35,8 @@ namespace graphics {
          */
         void setpixel(int x, int y, const RGBColor& color);
         RGBColor getpixel(int x, int y) const;
-        void fillcolor(const RGBColor& color);
+        void fillcolor(const RGBColor& color); // fill color in whole image
+        void fillcolor(int x, int y, const RGBColor &color); // fill color in an area
 
         /*
          * rendering
@@ -61,6 +64,8 @@ namespace graphics {
         int height() const {
             return height_;
         }
+
+        void filter();
     };
 }
 

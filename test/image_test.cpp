@@ -60,6 +60,7 @@ TEST_CASE ("image can be manipulated correctly", "[image]") {
         img.drawcircle(100, 100, 70, {0, 0, 0});
         img.drawcircle(240, 110, 50, {120, 90, 114});
         img.drawcircle(150, 210, 100, {240, 100, 78});
+        img.drawcircle(300, 210, 200, {200, 150, 10});
 
         img.show();
     }
@@ -88,16 +89,50 @@ TEST_CASE ("image can be manipulated correctly", "[image]") {
         img.show();
     }
 
-    SECTION("polygot drawn correctly") {
+    SECTION("polygon drawn correctly") {
         img.fillcolor({255, 255, 255});
+        img.setAntialiasing();
 
         raster::PointList points;
-        // points << Point2dR{10, 10} << Point2dR{10, 200} << Point2dR{200, 200} << Point2dR{200, 10};
         points << Point2dR{30, 10} << Point2dR{20, 300} << Point2dR{400, 300}
                << Point2dR{390, 10} << Point2dR{210, 200};
 
         img.drawpolygon(points, {0, 0, 0});
 
+
         img.show();
     }
+}
+
+TEST_CASE("image fill correctly", "[image]") {
+    Image img(800, 800);
+    img.fillcolor({0, 0, 0});
+
+    raster::PointList points;
+    points << Point2dR{400, 200} << Point2dR{227, 500} << Point2dR{573, 500};
+
+    img.drawpolygon(points, {200, 200, 100});
+    img.fillcolor(400, 400, {200, 200, 100});
+    img.filter();
+
+    img.show();
+}
+
+TEST_CASE("put it all together", "image") {
+    Image img(800, 800);
+    img.setAntialiasing();
+    img.fillcolor({255, 255, 255});
+
+    img.drawcircle(400, 400, 200, {244, 208, 63});
+    img.drawcircle(330, 330, 50, {244, 208, 63});
+    img.drawcircle(470, 330, 50, {244, 208, 63});
+
+    raster::PointList points;
+    points << Point2dR{400, 400} << Point2dR{357, 475} << Point2dR{443, 475};
+
+    img.drawpolygon(points, {244, 208, 63});
+
+    img.filter();
+
+    img.show();
 }

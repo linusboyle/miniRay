@@ -12,7 +12,6 @@ namespace graphics {
         void XiaolinWuCircle(Image& img, int centerx, int centery, int radius, const RGBColor& color);
 
         class PointList;
-
         void rasterize(Image& img, const PointList& polygot, RGBColor color);
     }
 }
