@@ -6,31 +6,31 @@
 
 namespace graphics {
     class Plane : public Surface {
-        // three point determine a plane
-        Point a;
-        Point b;
-        Point c;
+        // a point and a normal vector define an (infinite) plane
+        const Point p_;
+        const Vector3 normal_;
+
+        // a coefficient determined by p_ and normal_,
+        // as the equation of the plane holds: p_ * normal_ + D = 0
+        // It's provided to simplify computation
+        const coordinate_type D;
 
         // this point is used to indicate which side of the plane
-        // is 'positive'
-        // this point should not be on the plane
+        // is 'positive'. Though there should be a better way to 
+        // to this, right now it works fine.
+        // NOTE: this point shouldn't be on the plane
         Point referrence_point;
-        Vector3 solution(const Ray& ray);
-
-        // helper function
-        Vector3 normal() const;
-
-        // triangle wrapper class
-        friend class Triangle;
     public:
-
-        // the order does not matter
-        Plane(const Point& p1, const Point& p2, const Point& p3, RGBColor color, bool reflective = false);
+        Plane(Point p, Vector3 normal, RGBColor color, bool reflective = false);
 
         virtual intersect_type hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) override;
+
+        // TODO
+        // this function is meaningless for a plane
+        // There should be a method to get around this
         virtual BoundingBox boundingbox() const override;
 
-        // NOTE: this function is meaningless for a plane
+        // the gradient is a constant regardless of position on the plane
         virtual Vector3 gradient(const Point& position) const override;
         virtual ~Plane() override {}
 
