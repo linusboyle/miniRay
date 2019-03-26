@@ -25,7 +25,7 @@ namespace graphics {
 
     intersect_type Plane::hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) {
         if (scalarProduct(normal_, ray.direction()) == 0.0) { // parallel
-            return {};
+            return std::nullopt;
         }
 
         const coordinate_type t = 
