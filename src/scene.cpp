@@ -16,7 +16,7 @@ namespace graphics {
         }
     }
 
-    std::optional<coordinate_type> Scene::hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) {
+    std::optional<coordinate_type> Scene::hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound, Surface*& hitObj) const {
         bool hit = false;
         for (auto obj : objects) {
             auto result = obj->hit(ray, lowerbound, upperbound);
@@ -35,8 +35,8 @@ namespace graphics {
     }
 
     RGBColor Scene::specColor(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound, bool recurse) {
-        this->hitObj = nullptr;
-        auto hitResult = hit(ray, lowerbound, upperbound);
+        Surface* hitObj{nullptr};
+        auto hitResult = hit(ray, lowerbound, upperbound, hitObj);
 
         if (hitResult) {
             coordinate_type hitPosition = hitResult.value();
@@ -47,29 +47,31 @@ namespace graphics {
             // begin shading
             Point p = ray.source() + hitPosition * ray.direction();
             Vector3 normal = hitObj->gradient(p);
-            Surface* obj = hitObj;
             RGBColor pColor = ShadingPolicy::Ambient(hitObj->color(), aIntensity);
 
             for (auto light : lights) {
                 Vector3 lDirection = light.position - p;
 
-                auto shadowResult = hit({p, lDirection}, epsilon, std::numeric_limits<coordinate_type>::max());
+                Surface* shadowhitObj{nullptr};
+                auto shadowResult = hit({p, lDirection}, epsilon, std::numeric_limits<coordinate_type>::max(), shadowhitObj);
 
                 if (!shadowResult) {
                     pColor = pColor 
-                            + ShadingPolicy::Lambertian(obj->color(), light.intensity, normal, lDirection) 
-                            + ShadingPolicy::BlinnPhong(obj->color(), light.intensity, normal, lDirection, -ray.direction(), this->phongExponent);
+                            // TODO:
+                            // the diffuse coefficient and specualar coefficient is always the same 
+                            + ShadingPolicy::Lambertian(hitObj->color(), light.intensity, normal, lDirection) 
+                            + ShadingPolicy::BlinnPhong(hitObj->color(), light.intensity, normal, lDirection, -ray.direction(), this->phongExponent);
                 }
             }
 
             // reflection
-            if (recurse && obj->isReflective()) {
+            if (recurse && hitObj->isReflective()) {
                 Vector3 r = ray.direction() - 2 * scalarProduct(ray.direction(), normal) * normal;
                 pColor = pColor + 0.2 * specColor({p, r}, epsilon, std::numeric_limits<coordinate_type>::max(), false);
             }
             return pColor;
         } else {
-            return {0.0, 0.0, 0.0};
+            return {0.0, 0.0, 0.0}; // bgcolor
         }          
     }
 

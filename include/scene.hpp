@@ -18,15 +18,13 @@ namespace graphics {
     };
 
     class Scene {
-        Surface* hitObj = nullptr;
-
         std::vector<Surface*> objects;
         std::vector<LightSource> lights;
 
         coordinate_type aIntensity = 0.2;
         coordinate_type phongExponent = 10.0;
 
-        std::optional<coordinate_type> hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound);
+        std::optional<coordinate_type> hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound, Surface*& hitObj) const;
         RGBColor specColor(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound, bool recurse = true);
     public:
         void render(const Camera& camera, Image& img);

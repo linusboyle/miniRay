@@ -17,7 +17,7 @@ TEST_CASE ("ray and object intersection computed correctly", "[ray]") {
     REQUIRE(0.42265 - result.value() > std::numeric_limits<coordinate_type>::epsilon());
 }
 
-/*
+///*
 TEST_CASE("the ray tracing main function works correctly", "[ray]") {
     Image img(512, 512);
     img.fillcolor({255, 255, 255});
@@ -35,4 +35,4 @@ TEST_CASE("the ray tracing main function works correctly", "[ray]") {
     img.show();
     img.writeout("rendered.png");
 }
-*/
+//*/
