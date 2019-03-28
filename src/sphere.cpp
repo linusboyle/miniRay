@@ -5,7 +5,7 @@
 
 // compute the discriminant of quadratic equation
 // Ax^2 + Bx + C = 0
-static inline graphics::coordinate_type discriminant(graphics::coordinate_type A, graphics::coordinate_type B, graphics::coordinate_type C) {
+static inline graphics::coordinate_type discriminant_(graphics::coordinate_type A, graphics::coordinate_type B, graphics::coordinate_type C) {
     return  B * B - 4 * A * C;
 }
 
@@ -23,7 +23,7 @@ namespace graphics {
 
         assert(A > 0);
 
-        coordinate_type discriminant = ::discriminant(A, B, C);
+        coordinate_type discriminant = discriminant_(A, B, C);
 
         if (discriminant < 0) {
             return std::nullopt;
