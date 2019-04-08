@@ -1,35 +1,44 @@
 #ifndef SURFACE_CPP
 #define SURFACE_CPP
 
-#include "vector.hpp"
 #include "color.hpp"
+#include "vector.hpp"
 
 #include <optional>
 
 namespace graphics {
 
-    class Ray;
+class Ray;
 
-    struct BoundingBox {
-        Point first;
-        Point second;
-    };
+struct BoundingBox
+{
+  Point first;
+  Point second;
+};
 
-    using intersect_type = std::optional<coordinate_type>;
+// t and uNormal
+using intersect_type = std::optional<std::pair<coordinate_type, Vector3>>;
 
-    class Surface {
-        RGBColor color_;
-        bool reflective;
-    public:
-        Surface(const RGBColor& color, bool reflective = false): color_(color), reflective(reflective) {}
+class Surface
+{
+  // TODO: extend to pattern
+  RGBColor color_;
+  bool reflective;
 
-        RGBColor color() const { return color_; }
-        bool isReflective() const { return reflective; }
+public:
+  Surface(const RGBColor& color, bool reflective)
+    : color_(color)
+    , reflective(reflective)
+  {}
 
-        virtual ~Surface() = 0;
-        virtual intersect_type hit(const Ray& ray, coordinate_type lowerbound, coordinate_type upperbound) = 0;   
-        virtual BoundingBox boundingbox() const = 0;
-        virtual Vector3 gradient(const Point& position) const = 0;
-    };
+  RGBColor color() const { return color_; }
+  bool isReflective() const { return reflective; }
+
+  virtual ~Surface() = 0;
+  virtual intersect_type hit(const Ray& ray,
+                             coordinate_type lowerbound,
+                             coordinate_type upperbound) = 0;
+  virtual BoundingBox boundingbox() const = 0;
+};
 }
 #endif /* ifndef SURFACE_CPP */
