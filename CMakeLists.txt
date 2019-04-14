@@ -11,7 +11,7 @@ option(USE_FLOAT
     "use float in computing" OFF)
 
 include_directories(include ${PROJECT_BINARY_DIR})
-add_compile_options(-Wall -Wextra -g)
+add_compile_options(-Wall -Wextra -g -fopenmp)
 
 add_subdirectory(src)
 add_subdirectory(test EXCLUDE_FROM_ALL)
