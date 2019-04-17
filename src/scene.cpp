@@ -4,26 +4,24 @@
 #include "shading.hpp"
 #include "surface.hpp"
 
+#include <iostream>
 #include <limits>
 
 static constexpr graphics::coordinate_type epsilon = 0.01;
 
 namespace graphics {
 
-Scene::~Scene()
-{
+Scene::~Scene() {
   for (auto ptr : objects) {
     delete ptr;
   }
 }
 
-std::optional<std::tuple<coordinate_type, Vector3, Surface*>>
-Scene::getHitInfo(const Ray& ray,
-                  coordinate_type lowerbound,
-                  coordinate_type upperbound) const
-{
+std::optional<std::tuple<coordinate_type, Vector3, Surface *>>
+Scene::getHitInfo(const Ray &ray, coordinate_type lowerbound,
+                  coordinate_type upperbound) const {
   bool hit = false;
-  Surface* hitObj = nullptr;
+  Surface *hitObj = nullptr;
   Vector3 uNormal;
   for (auto obj : objects) {
     auto result = obj->hit(ray, lowerbound, upperbound);
@@ -36,17 +34,14 @@ Scene::getHitInfo(const Ray& ray,
   }
 
   if (hit) {
-    return std::tuple{ upperbound, uNormal, hitObj };
+    return std::tuple{upperbound, uNormal, hitObj};
   } else {
     return std::nullopt;
   }
 }
 
-bool
-Scene::checkHit(const Ray& ray,
-                coordinate_type lowerbound,
-                coordinate_type upperbound) const
-{
+bool Scene::checkHit(const Ray &ray, coordinate_type lowerbound,
+                     coordinate_type upperbound) const {
   for (auto obj : objects) {
     auto result = obj->hit(ray, lowerbound, upperbound);
     if (result) {
@@ -56,18 +51,14 @@ Scene::checkHit(const Ray& ray,
   return false;
 }
 
-RGBColor
-Scene::specColor(const Ray& ray,
-                 coordinate_type lowerbound,
-                 coordinate_type upperbound,
-                 bool recurse)
-{
+RGBColor Scene::specColor(const Ray &ray, coordinate_type lowerbound,
+                          coordinate_type upperbound, bool recurse) {
   auto hitResult = getHitInfo(ray, lowerbound, upperbound);
 
   if (hitResult) {
     coordinate_type hitPosition = std::get<0>(hitResult.value());
     Vector3 normal = std::get<1>(hitResult.value());
-    Surface* hitObj = std::get<2>(hitResult.value());
+    Surface *hitObj = std::get<2>(hitResult.value());
 
     // suppose the image has been filled with background color before render
     // process, so that no trouble for that here.
@@ -79,22 +70,19 @@ Scene::specColor(const Ray& ray,
     for (auto light : lights) {
       Vector3 lDirection = light.position - p;
 
-      auto shadowResult = checkHit({ p, lDirection },
-                                   epsilon,
-                                   std::numeric_limits<coordinate_type>::max());
+      auto shadowResult =
+          checkHit({p, lDirection}, epsilon, modulus(lDirection));
 
       if (!shadowResult) {
+        std::cout << "not shadowed!\n";
         pColor = pColor
                  // TODO:
                  // the diffuse coefficient and specualar coefficient is always
                  // the same
-                 + ShadingPolicy::Lambertian(
-                     hitObj->color(), light.intensity, normal, lDirection) +
-                 ShadingPolicy::BlinnPhong(hitObj->color(),
-                                           light.intensity,
-                                           normal,
-                                           lDirection,
-                                           -ray.direction(),
+                 + ShadingPolicy::Lambertian(hitObj->color(), light.intensity,
+                                             normal, lDirection) +
+                 ShadingPolicy::BlinnPhong(hitObj->color(), light.intensity,
+                                           normal, lDirection, -ray.direction(),
                                            this->phongExponent);
       }
     }
@@ -102,22 +90,19 @@ Scene::specColor(const Ray& ray,
     // reflection
     if (recurse && hitObj->isReflective()) {
       Vector3 r =
-        ray.direction() - 2 * scalarProduct(ray.direction(), normal) * normal;
+          ray.direction() - 2 * scalarProduct(ray.direction(), normal) * normal;
       pColor =
-        pColor + 0.2 * specColor({ p, r },
-                                 epsilon,
-                                 std::numeric_limits<coordinate_type>::max(),
-                                 false);
+          pColor + 0.2 * specColor({p, r}, epsilon,
+                                   std::numeric_limits<coordinate_type>::max(),
+                                   false);
     }
     return pColor;
   } else {
-    return { 0.0, 0.0, 0.0 }; // bgcolor
+    return {0.0, 0.0, 0.0}; // bgcolor
   }
 }
 
-void
-Scene::render(const Camera& camera, Image& img)
-{
+void Scene::render(const Camera &camera, Image &img) {
   auto plane = camera.imagePlane();
   const coordinate_type pWidth = plane.right_bound - plane.left_bound;
   const coordinate_type pHeight = plane.top_bound - plane.bottom_bound;
@@ -133,9 +118,9 @@ Scene::render(const Camera& camera, Image& img)
       Ray ray = camera.genRay(u, v);
 
       RGBColor color =
-        specColor(ray, 0, std::numeric_limits<coordinate_type>::max());
+          specColor(ray, 0, std::numeric_limits<coordinate_type>::max());
       img.setpixel(i, j, color);
     }
   }
 }
-}
+} // namespace graphics
