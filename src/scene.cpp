@@ -71,7 +71,7 @@ RGBColor Scene::specColor(const Ray &ray, coordinate_type lowerbound,
       Vector3 lDirection = light.position - p;
 
       auto shadowResult =
-          checkHit({p, lDirection}, epsilon, modulus(lDirection));
+          checkHit({p, lDirection}, epsilon, 1.0);
 
       if (!shadowResult) {
         std::cout << "not shadowed!\n";
