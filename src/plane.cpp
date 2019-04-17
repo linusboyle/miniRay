@@ -3,8 +3,7 @@
 
 namespace graphics {
 Plane::Plane(Point p, Vector3 normal, RGBColor color, bool reflective)
-    : Surface(color, reflective), p_(std::move(p)), normal_(std::move(normal)),
-      D(-scalarProduct(p_, normal_)) {}
+    : Surface(color, reflective), p_(std::move(p)), normal_(std::move(normal)) {}
 
 Vector3 Plane::computeNormal(Ray ray) const {
   Vector3 uNormal = normalize(normal_);
@@ -36,4 +35,5 @@ intersect_type Plane::hit(const Ray &ray, coordinate_type lowerbound,
     return std::nullopt;
   }
 }
+
 } // namespace graphics

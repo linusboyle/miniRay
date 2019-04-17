@@ -11,11 +11,6 @@ class Plane : public Surface
   const Point p_;
   const Vector3 normal_;
 
-  // a coefficient determined by p_ and normal_,
-  // as the equation of the plane holds: p_ * normal_ + D = 0
-  // It's provided to simplify computation
-  const coordinate_type D;
-
   Vector3 computeNormal(Ray ray) const;
 
 public:
