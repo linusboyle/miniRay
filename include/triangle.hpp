@@ -4,8 +4,7 @@
 #include "surface.hpp"
 
 namespace graphics {
-class Triangle : public Surface
-{
+class Triangle : public Surface {
   Point a;
   Point b;
   Point c;
@@ -13,18 +12,14 @@ class Triangle : public Surface
   Vector3 computeNormal(Ray ray) const;
 
 public:
-  Triangle(Point a_,
-           Point b_,
-           Point c_,
-           RGBColor color,
-           bool reflective = false);
+  Triangle(Point a_, Point b_, Point c_, RGBColor color,
+           SurfaceProperty p = SurfaceProperty::DIFFUSE);
 
-  virtual intersect_type hit(const Ray& ray,
-                             coordinate_type lowerbound,
+  virtual intersect_type hit(const Ray &ray, coordinate_type lowerbound,
                              coordinate_type upperbound) override;
   virtual BoundingBox boundingbox() const override;
   virtual ~Triangle() override {}
 };
-}
+} // namespace graphics
 
 #endif

@@ -5,8 +5,7 @@
 #include "vector.hpp"
 
 namespace graphics {
-class Plane : public Surface
-{
+class Plane : public Surface {
   // a point and a normal vector define an (infinite) plane
   const Point p_;
   const Vector3 normal_;
@@ -14,10 +13,10 @@ class Plane : public Surface
   Vector3 computeNormal(Ray ray) const;
 
 public:
-  Plane(Point p, Vector3 normal, RGBColor color, bool reflective = false);
+  Plane(Point p, Vector3 normal, RGBColor color,
+        SurfaceProperty property = SurfaceProperty::DIFFUSE);
 
-  virtual intersect_type hit(const Ray& ray,
-                             coordinate_type lowerbound,
+  virtual intersect_type hit(const Ray &ray, coordinate_type lowerbound,
                              coordinate_type upperbound) override;
 
   // TODO
@@ -28,6 +27,6 @@ public:
   // the gradient is a constant regardless of position on the plane
   virtual ~Plane() override {}
 };
-}
+} // namespace graphics
 
 #endif /* ifndef PLANE_HPP */

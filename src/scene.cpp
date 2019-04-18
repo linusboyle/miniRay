@@ -62,35 +62,50 @@ RGBColor Scene::specColor(const Ray &ray, coordinate_type lowerbound,
 
     // begin shading
     Point p = ray.source() + hitPosition * ray.direction();
-    RGBColor pColor = ShadingPolicy::Ambient(hitObj->color(), aIntensity);
+    RGBColor pColor{0, 0, 0};
+    SurfaceProperty oProperty = hitObj->property();
 
-    for (auto light : lights) {
-      Vector3 lDirection = light.position - p;
+    switch (oProperty) {
+        case SurfaceProperty::DIFFUSE: 
+        {
+            pColor = pColor + ShadingPolicy::Ambient(hitObj->color(), aIntensity);
+            for (auto light : lights) {
+                Vector3 lDirection = light.position - p;
 
-      auto shadowResult = checkHit({p, lDirection}, epsilon, 1.0);
+                auto shadowResult = checkHit({p, lDirection}, epsilon, 1.0);
 
-      if (!shadowResult) {
-        pColor = pColor
-                 // TODO:
-                 // the diffuse coefficient and specualar coefficient is always
-                 // the same
-                 + ShadingPolicy::Lambertian(hitObj->color(), light.intensity,
-                                             normal, lDirection) +
-                 ShadingPolicy::BlinnPhong(hitObj->color(), light.intensity,
-                                           normal, lDirection, -ray.direction(),
-                                           this->phongExponent);
-      }
+                if (!shadowResult) {
+                    pColor = pColor
+                            // TODO:
+                            // the diffuse coefficient and specualar coefficient is always
+                            // the same
+                            + ShadingPolicy::Lambertian(hitObj->color(), light.intensity,
+                                                        normal, lDirection) +
+                            ShadingPolicy::BlinnPhong(hitObj->color(), light.intensity,
+                                                    normal, lDirection, -ray.direction(),
+                                                    this->phongExponent);
+                }
+            }
+            break;
+        }
+        case SurfaceProperty::REFLECTIVE:
+        {
+            if (recurse) {
+                Vector3 r =
+                    ray.direction() - 2 * scalarProduct(ray.direction(), normal) * normal;
+                pColor =
+                    pColor + hitObj->color() * 
+                                    specColor({p, r}, epsilon,
+                                    std::numeric_limits<coordinate_type>::max(),
+                                    false);
+            }
+            break;
+        }
+        case SurfaceProperty::REFRACTIVE:
+        default:
+            break;
     }
 
-    // reflection
-    if (recurse && hitObj->isReflective()) {
-      Vector3 r =
-          ray.direction() - 2 * scalarProduct(ray.direction(), normal) * normal;
-      pColor =
-          pColor + 0.2 * specColor({p, r}, epsilon,
-                                   std::numeric_limits<coordinate_type>::max(),
-                                   false);
-    }
     return pColor;
   } else {
     return {0.0, 0.0, 0.0}; // bgcolor

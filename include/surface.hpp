@@ -18,17 +18,23 @@ struct BoundingBox {
 // t and uNormal
 using intersect_type = std::optional<std::pair<coordinate_type, Vector3>>;
 
+enum class SurfaceProperty {
+  DIFFUSE,
+  REFLECTIVE, // specular
+  REFRACTIVE  // dielectric
+};
+
 class Surface {
   // TODO: extend to pattern
   RGBColor color_;
-  bool reflective;
+  SurfaceProperty property_;
 
 public:
-  Surface(const RGBColor &color, bool reflective)
-      : color_(color), reflective(reflective) {}
+  Surface(const RGBColor &color, SurfaceProperty p)
+      : color_(color), property_(p) {}
 
   RGBColor color() const { return color_; }
-  bool isReflective() const { return reflective; }
+  SurfaceProperty property() const { return this->property_; }
 
   virtual ~Surface();
   virtual intersect_type hit(const Ray &ray, coordinate_type lowerbound,

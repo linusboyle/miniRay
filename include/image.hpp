@@ -36,10 +36,10 @@ namespace graphics {
         void setpixel(int x, int y, const RGBColor& color);
         RGBColor getpixel(int x, int y) const;
         void fillcolor(const RGBColor& color); // fill color in whole image
-        void fillcolor(int x, int y, const RGBColor &color); // fill color in an area
+        void fillcolor(int x, int y, const RGBColor& color); // fill color in an area
 
         /*
-         * rendering
+         * raster
          */
         void drawpoints(const raster::PointList& points, const RGBColor& color);
         void drawline(int x1, int y1, int x2, int y2, const RGBColor& color);

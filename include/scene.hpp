@@ -20,8 +20,8 @@ class Scene {
   std::vector<Surface *> objects;
   std::vector<LightSource> lights;
 
-  RGBColor aIntensity{0.2, 0.2, 0.2};
-  coordinate_type phongExponent = 10.0;
+  RGBColor aIntensity{0.1, 0.1, 0.1};
+  coordinate_type phongExponent = 8.0;
 
   bool checkHit(const Ray &ray, coordinate_type lowerbound,
                 coordinate_type upperbound) const;
