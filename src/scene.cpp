@@ -107,6 +107,7 @@ void Scene::render(const Camera &camera, Image &img) {
   const coordinate_type uStep = pWidth / img.width();
   const coordinate_type vStep = pHeight / img.height();
 
+#pragma omp parallel for schedule(dynamic, 1)
   for (int i = 0; i < img.width(); ++i) {
     coordinate_type u = plane.left_bound + (i + 0.5) * uStep;
     for (int j = 0; j < img.height(); ++j) {
