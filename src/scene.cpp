@@ -4,7 +4,6 @@
 #include "shading.hpp"
 #include "surface.hpp"
 
-#include <iostream>
 #include <limits>
 
 static constexpr graphics::coordinate_type epsilon = 0.01;
@@ -70,11 +69,9 @@ RGBColor Scene::specColor(const Ray &ray, coordinate_type lowerbound,
     for (auto light : lights) {
       Vector3 lDirection = light.position - p;
 
-      auto shadowResult =
-          checkHit({p, lDirection}, epsilon, 1.0);
+      auto shadowResult = checkHit({p, lDirection}, epsilon, 1.0);
 
       if (!shadowResult) {
-        std::cout << "not shadowed!\n";
         pColor = pColor
                  // TODO:
                  // the diffuse coefficient and specualar coefficient is always
