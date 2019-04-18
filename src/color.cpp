@@ -11,6 +11,10 @@ RGBColor operator-(const RGBColor &lhs, const RGBColor &rhs) {
 
 RGBColor operator*(double lhs, const RGBColor &rhs) { return {lhs * rhs.rgb_}; }
 
+RGBColor operator*(const RGBColor &lhs, const RGBColor &rhs) {
+  return {mult(lhs.rgb_, rhs.rgb_)};
+}
+
 bool operator==(const RGBColor &lhs, const RGBColor &rhs) {
   // almost equal
   if (lhs.r() == rhs.r() && lhs.b() == rhs.b() && lhs.g() == rhs.g())

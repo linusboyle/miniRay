@@ -6,13 +6,14 @@
 
 #include <limits>
 
-static constexpr graphics::coordinate_type epsilon = 0.01;
-
 namespace graphics {
+
+static constexpr coordinate_type epsilon = 0.01;
 
 Scene::~Scene() {
   for (auto ptr : objects) {
-    delete ptr;
+    if (ptr)
+      delete ptr;
   }
 }
 
@@ -58,9 +59,6 @@ RGBColor Scene::specColor(const Ray &ray, coordinate_type lowerbound,
     coordinate_type hitPosition = std::get<0>(hitResult.value());
     Vector3 normal = std::get<1>(hitResult.value());
     Surface *hitObj = std::get<2>(hitResult.value());
-
-    // suppose the image has been filled with background color before render
-    // process, so that no trouble for that here.
 
     // begin shading
     Point p = ray.source() + hitPosition * ray.direction();
@@ -111,6 +109,9 @@ void Scene::render(const Camera &camera, Image &img) {
   for (int i = 0; i < img.width(); ++i) {
     coordinate_type u = plane.left_bound + (i + 0.5) * uStep;
     for (int j = 0; j < img.height(); ++j) {
+      if (i == 236 && j == 385) {
+        std::cout << "in condition";
+      }
       coordinate_type v = plane.top_bound - (j + 0.5) * vStep;
       Ray ray = camera.genRay(u, v);
 

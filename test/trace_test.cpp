@@ -92,7 +92,7 @@ TEST_CASE("Cornell Box", "[ray]") {
   img.fillcolor({0, 0, 0});
 
   Scene scene;
-  scene.setAmbientIntensity(0.2);
+  //  scene.setAmbientIntensity({0.25, 0.25, 0.25});
   // left
   scene.addObject(new Plane{Point{0.0, 0.0, 0.0}, Vector3{0.0, 1.0, 0.0},
                             RGBColor{191, 64, 64}});
@@ -112,7 +112,7 @@ TEST_CASE("Cornell Box", "[ray]") {
   scene.addObject(new Plane{Point{0.0, 0.0, 100.0}, Vector3{0.0, 0.0, -1.0},
                             RGBColor{191, 191, 191}});
 
-  scene.addLightSource({Point{50.0, 50.0, 98.0}, 0.3});
+  scene.addLightSource({Point{50.0, 50.0, 99.27}, RGBColor{0.8, 0.8, 0.8}});
   Camera camera(Point{50.0, 50.0, 40.0}, Vector3{-1.0, 0.0, 0.0}, 2.0,
                 {-4.0, 4.0, 4.0, -4.0});
   scene.render(camera, img);
