@@ -10,8 +10,7 @@ namespace graphics {
 
 class Ray;
 
-struct BoundingBox
-{
+struct BoundingBox {
   Point first;
   Point second;
 };
@@ -19,26 +18,22 @@ struct BoundingBox
 // t and uNormal
 using intersect_type = std::optional<std::pair<coordinate_type, Vector3>>;
 
-class Surface
-{
+class Surface {
   // TODO: extend to pattern
   RGBColor color_;
   bool reflective;
 
 public:
-  Surface(const RGBColor& color, bool reflective)
-    : color_(color)
-    , reflective(reflective)
-  {}
+  Surface(const RGBColor &color, bool reflective)
+      : color_(color), reflective(reflective) {}
 
   RGBColor color() const { return color_; }
   bool isReflective() const { return reflective; }
 
-  virtual ~Surface() = 0;
-  virtual intersect_type hit(const Ray& ray,
-                             coordinate_type lowerbound,
+  virtual ~Surface();
+  virtual intersect_type hit(const Ray &ray, coordinate_type lowerbound,
                              coordinate_type upperbound) = 0;
   virtual BoundingBox boundingbox() const = 0;
 };
-}
+} // namespace graphics
 #endif /* ifndef SURFACE_CPP */
