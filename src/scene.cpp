@@ -98,21 +98,16 @@ RGBColor Scene::specColor(const Ray &ray, coordinate_type lowerbound,
 }
 
 void Scene::render(const Camera &camera, Image &img) {
-  auto plane = camera.imagePlane();
-  const coordinate_type pWidth = plane.right_bound - plane.left_bound;
-  const coordinate_type pHeight = plane.top_bound - plane.bottom_bound;
+  auto edge_width = camera.edge();
 
-  const coordinate_type uStep = pWidth / img.width();
-  const coordinate_type vStep = pHeight / img.height();
+  const coordinate_type uStep = 2 * edge_width / img.width();
+  const coordinate_type vStep = 2 * edge_width / img.height();
 
 #pragma omp parallel for schedule(dynamic, 1)
   for (int i = 0; i < img.width(); ++i) {
-    coordinate_type u = plane.left_bound + (i + 0.5) * uStep;
+    coordinate_type u = -edge_width + (i + 0.5) * uStep;
     for (int j = 0; j < img.height(); ++j) {
-      if (i == 236 && j == 385) {
-        std::cout << "in condition";
-      }
-      coordinate_type v = plane.top_bound - (j + 0.5) * vStep;
+      coordinate_type v = edge_width - (j + 0.5) * vStep;
       Ray ray = camera.genRay(u, v);
 
       RGBColor color =

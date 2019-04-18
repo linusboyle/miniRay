@@ -33,8 +33,7 @@ TEST_CASE("the ray tracing main function works correctly", "[ray]") {
                             RGBColor{70, 70, 70}, true});
   scene.addLightSource({Point{2.7, -0.3, 3.4}, {0.7, 0.7, 0.7}});
   scene.addLightSource({Point{1.0, 4.3, 4.0}, {0.3, 0.3, 0.3}});
-  Camera camera(Point{5.0, 5.0, 5.0}, Vector3{-1.0, -1.0, -1.0}, 0.7,
-                {-0.4, 0.4, 0.4, -0.4});
+  Camera camera(Point{5.0, 5.0, 5.0}, Vector3{-1.0, -1.0, -1.0}, 0.7, 1.0);
   scene.render(camera, img);
 
   img.show();
@@ -106,8 +105,7 @@ TEST_CASE("Cornell Box", "[ray]") {
                             RGBColor{191, 191, 191}});
 
   scene.addLightSource({Point{50.0, 50.0, 99.27}, RGBColor{0.7, 0.7, 0.7}});
-  Camera camera(Point{50.0, 50.0, 40.0}, Vector3{-1.0, 0.0, 0.0}, 2.0,
-                {-4.0, 4.0, 4.0, -4.0});
+  Camera camera(Point{50.0, 50.0, 40.0}, Vector3{-1.0, 0.0, 0.0}, 2.0, 4.0);
   scene.render(camera, img);
 
   img.show();
