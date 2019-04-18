@@ -1,6 +1,5 @@
 #include "shading.hpp"
 #include <algorithm>
-#include <cmath>
 
 namespace graphics {
 

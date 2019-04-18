@@ -7,12 +7,15 @@ namespace graphics {
 class RGBColor {
   Vector3 rgb_;
 
-  unsigned char clamp(double color) const {
-    double tmp = color * 255;
-    if (tmp > 255.0) {
-      tmp = 255.0;
-    }
-    return static_cast<unsigned char>(tmp);
+  double clamp(double color) const {
+    // trim the illegal range
+    return color < 0 ? 0 : color > 1 ? 1 : color;
+  }
+
+  unsigned char transform(double color) const {
+    // gamma correction
+    return static_cast<unsigned char>(std::pow(clamp(color), 1 / 2.2) * 255 +
+                                      0.5);
   }
 
 public:
@@ -20,9 +23,9 @@ public:
   RGBColor(double r, double g, double b) : rgb_(r, g, b) {}
   RGBColor(Vector3 color) : rgb_(color) {}
 
-  unsigned char r() const { return clamp(rgb_(0)); }
-  unsigned char g() const { return clamp(rgb_(1)); }
-  unsigned char b() const { return clamp(rgb_(2)); }
+  unsigned char r() const { return transform(rgb_(0)); }
+  unsigned char g() const { return transform(rgb_(1)); }
+  unsigned char b() const { return transform(rgb_(2)); }
 
   friend RGBColor operator+(const RGBColor &lhs, const RGBColor &rhs);
   friend RGBColor operator-(const RGBColor &lhs, const RGBColor &rhs);
