@@ -2,3 +2,4 @@
 *.out
 *.user
 *.autosave
+.directory

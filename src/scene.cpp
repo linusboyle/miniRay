@@ -120,14 +120,17 @@ void Scene::render(const Camera &camera, Image &img) {
 
 #pragma omp parallel for schedule(dynamic, 1)
   for (int i = 0; i < img.width(); ++i) {
-    coordinate_type u = -edge_width + (i + 0.5) * uStep;
     for (int j = 0; j < img.height(); ++j) {
-      coordinate_type v = edge_width - (j + 0.5) * vStep;
-      Ray ray = camera.genRay(u, v);
-
-      RGBColor color =
-          specColor(ray, 0, std::numeric_limits<coordinate_type>::max());
-      img.setpixel(i, j, color);
+        RGBColor color{0, 0, 0};
+        for (int sx = 0; sx < 2; ++sx) {
+            for (int sy = 0; sy < 2; ++sy) {
+                coordinate_type u = -edge_width + (i + 0.25 + 0.5 * sx) * uStep;
+                coordinate_type v = edge_width - (j + 0.25 + 0.5 * sy) * vStep;
+                Ray ray = camera.genRay(u, v);
+                color = color + 0.25 * specColor(ray, 0, std::numeric_limits<coordinate_type>::max());
+            }
+        }
+        img.setpixel(i, j, color);
     }
   }
 }
