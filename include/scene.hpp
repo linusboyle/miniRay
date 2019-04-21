@@ -2,6 +2,7 @@
 #define SCENE_HPP
 
 #include "color.hpp"
+#include "random.hpp"
 #include <optional>
 #include <vector>
 
@@ -17,6 +18,7 @@ struct LightSource {
 };
 
 class Scene {
+    RandomGenerator grand{0, 0.0, 1.0};
   std::vector<Surface *> objects;
   std::vector<LightSource> lights;
 

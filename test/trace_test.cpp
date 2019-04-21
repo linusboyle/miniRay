@@ -109,7 +109,7 @@ TEST_CASE("Cornell Box", "[ray]") {
     scene.addObject(new Sphere{Point{20.0, 30.5, 16.5}, 16.5, RGBColor{0.3, 0.3, 0.3}, SurfaceProperty::DIFFUSE});
 
     scene.addLightSource({Point{45.0, 50.0, 99.27}, RGBColor{0.7, 0.7, 0.7}});
-    Camera camera(Point{70.0, 50.0, 55.0}, Vector3{-1.0, 0.0, -0.05}, 2.0, 3.0);
+    Camera camera(Point{70.0, 50.0, 30.0}, Vector3{-1.0, 0.0, 0.05}, 2.0, 3.0);
     scene.render(camera, img);
 
     img.show();

@@ -3,6 +3,7 @@
 #include "image.hpp"
 #include "shading.hpp"
 #include "surface.hpp"
+#include "random.hpp"
 
 #include <limits>
 
@@ -120,14 +121,22 @@ void Scene::render(const Camera &camera, Image &img) {
 
 #pragma omp parallel for schedule(dynamic, 1)
   for (int i = 0; i < img.width(); ++i) {
+      grand.seed(i * i);
     for (int j = 0; j < img.height(); ++j) {
         RGBColor color{0, 0, 0};
-        for (int sx = 0; sx < 2; ++sx) {
+        for (int sx = 0; sx < 2; ++sx) { // subpixels
             for (int sy = 0; sy < 2; ++sy) {
-                coordinate_type u = -edge_width + (i + 0.25 + 0.5 * sx) * uStep;
-                coordinate_type v = edge_width - (j + 0.25 + 0.5 * sy) * vStep;
-                Ray ray = camera.genRay(u, v);
-                color = color + 0.25 * specColor(ray, 0, std::numeric_limits<coordinate_type>::max());
+                constexpr int SAMPLE = 4;
+                RGBColor sColor{0, 0, 0};
+                for (int sample = 0; sample < SAMPLE; ++sample) { // samples
+                    coordinate_type dx = grand.next();
+                    coordinate_type dy = grand.next();
+                    coordinate_type u = -edge_width + (i + 0.5 * sx + 0.5 * dx) * uStep;
+                    coordinate_type v = edge_width - (j + 0.5 * sy + 0.5 * dy) * vStep;
+                    Ray ray = camera.genRay(u, v);
+                    sColor = sColor + (1.0 / SAMPLE) * specColor(ray, 0, std::numeric_limits<coordinate_type>::max());
+                }
+                color = color + 0.25 * sColor;
             }
         }
         img.setpixel(i, j, color);
