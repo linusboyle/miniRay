@@ -81,7 +81,7 @@ RGBColor Scene::specColor(const Ray &ray, uint8_t depth) {
             coordinate_type r2s = std::sqrt(r2);
             Vector3 u = normalize(crossProduct(std::fabs(normal(0)) > 0.1 ? Vector3{0.0, 1.0, 0.0} : Vector3{1.0, 0.0, 0.0}, normal));
             Vector3 v = crossProduct(normal, u);
-            Vector3 newdir = normalize(r2s * std::cos(r1) * u + r2s * std::cos(r1) * v + std::sqrt(1 - r2) * normal); 
+            Vector3 newdir = normalize(r2s * std::cos(r1) * u + r2s * std::sin(r1) * v + std::sqrt(1 - r2) * normal); 
 
             return hitObj->emission() + color * specColor(Ray{pos, newdir}, depth);
             //pColor = pColor + ShadingPolicy::Ambient(hitObj->color(), aIntensity);
