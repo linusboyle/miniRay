@@ -24,7 +24,7 @@ namespace graphics {
     public:
 
         Image(int width, int height)
-            : rgb_(width, height, CV_8UC3, cv::Scalar{0, 0, 0})
+            : rgb_(height, width, CV_8UC3, cv::Scalar{0, 0, 0})
             , width_(width)
             , height_(height)
             , use_antialiasing(false)
