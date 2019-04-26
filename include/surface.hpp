@@ -27,14 +27,16 @@ enum class SurfaceProperty {
 class Surface {
   // TODO: extend to pattern
   RGBColor color_;
+  RGBColor emission_;
   SurfaceProperty property_;
 
 public:
-  Surface(const RGBColor &color, SurfaceProperty p)
-      : color_(color), property_(p) {}
+  Surface(const RGBColor& color, const RGBColor& emission, SurfaceProperty p)
+      : color_(color), emission_(emission), property_(p) {}
 
   RGBColor color() const { return color_; }
   SurfaceProperty property() const { return this->property_; }
+  RGBColor emission() const { return emission_; }
 
   virtual ~Surface();
   virtual intersect_type hit(const Ray &ray, coordinate_type lowerbound,

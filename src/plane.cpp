@@ -2,8 +2,8 @@
 #include "ray.hpp"
 
 namespace graphics {
-Plane::Plane(Point p, Vector3 normal, RGBColor color, SurfaceProperty property)
-    : Surface(color, property), p_(std::move(p)), normal_(std::move(normal)) {}
+Plane::Plane(Point p, Vector3 normal, RGBColor color, RGBColor emission, SurfaceProperty property)
+    : Surface(color, emission, property), p_(std::move(p)), normal_(std::move(normal)) {}
 
 Vector3 Plane::computeNormal(Ray ray) const {
   Vector3 uNormal = normalize(normal_);

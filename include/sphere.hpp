@@ -11,8 +11,9 @@ class Sphere : public Surface {
 
 public:
   Sphere(Point center, coordinate_type radius, RGBColor color,
+          RGBColor emission = {0,0,0},
          SurfaceProperty p = SurfaceProperty::DIFFUSE)
-      : Surface(color, p), center_(center), radius_(radius) {}
+      : Surface(color, emission, p), center_(center), radius_(radius) {}
   virtual intersect_type hit(const Ray &ray, coordinate_type lowerbound,
                              coordinate_type upperbound) override;
   virtual BoundingBox boundingbox() const override;

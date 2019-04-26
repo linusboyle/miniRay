@@ -12,35 +12,34 @@ class Image;
 class Surface;
 class Ray;
 
-struct LightSource {
-  Point position;
-  RGBColor intensity;
-};
+//struct LightSource {
+  //Point position;
+  //RGBColor intensity;
+//};
 
 class Scene {
-    RandomGenerator grand{0, 0.0, 1.0};
+  RandomGenerator grand{0, 0.0, 1.0};
   std::vector<Surface *> objects;
-  std::vector<LightSource> lights;
+  //std::vector<LightSource> lights;
 
-  RGBColor aIntensity{0.1, 0.1, 0.1};
-  coordinate_type phongExponent = 8.0;
+  //RGBColor aIntensity{0.1, 0.1, 0.1}; // ambient illuminance
+  //coordinate_type phongExponent = 8.0;
 
-  bool checkHit(const Ray &ray, coordinate_type lowerbound,
-                coordinate_type upperbound) const;
+  //bool checkHit(const Ray &ray, coordinate_type lowerbound,
+                //coordinate_type upperbound) const;
 
   std::optional<std::tuple<coordinate_type, Vector3, Surface *>>
   getHitInfo(const Ray &ray, coordinate_type lowerbound,
              coordinate_type upperbound) const;
 
-  RGBColor specColor(const Ray &ray, coordinate_type lowerbound,
-                     coordinate_type upperbound, bool recurse = true);
+  RGBColor specColor(const Ray &ray, uint8_t depth);
 
 public:
-  void render(const Camera &camera, Image &img);
+  void render(const Camera &camera, Image &img, uint32_t sampleCon = 4);
   void addObject(Surface *obj) { objects.push_back(obj); }
-  void addLightSource(LightSource light) { lights.push_back(light); }
-  void setAmbientIntensity(RGBColor intensity) { aIntensity = intensity; }
-  void setPhongExponent(coordinate_type exponent) { phongExponent = exponent; }
+  //void addLightSource(LightSource light) { lights.push_back(light); }
+  //void setAmbientIntensity(RGBColor intensity) { aIntensity = intensity; }
+  //void setPhongExponent(coordinate_type exponent) { phongExponent = exponent; }
 
   ~Scene();
 };

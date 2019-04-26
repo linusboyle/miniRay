@@ -13,6 +13,7 @@ class Triangle : public Surface {
 
 public:
   Triangle(Point a_, Point b_, Point c_, RGBColor color,
+          RGBColor emission = {0, 0, 0},
            SurfaceProperty p = SurfaceProperty::DIFFUSE);
 
   virtual intersect_type hit(const Ray &ray, coordinate_type lowerbound,

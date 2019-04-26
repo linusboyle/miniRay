@@ -15,8 +15,9 @@ static coordinate_type max3(coordinate_type a, coordinate_type b,
 }
 
 Triangle::Triangle(Point a_, Point b_, Point c_, RGBColor color,
+        RGBColor emission,
                    SurfaceProperty p)
-    : Surface(color, p), a(a_), b(b_), c(c_) {}
+    : Surface(color, emission, p), a(a_), b(b_), c(c_) {}
 
 intersect_type Triangle::hit(const Ray &ray, coordinate_type lowerbound,
                              coordinate_type upperbound) {

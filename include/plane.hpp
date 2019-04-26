@@ -14,6 +14,7 @@ class Plane : public Surface {
 
 public:
   Plane(Point p, Vector3 normal, RGBColor color,
+          RGBColor emission = {0, 0, 0},
         SurfaceProperty property = SurfaceProperty::DIFFUSE);
 
   virtual intersect_type hit(const Ray &ray, coordinate_type lowerbound,

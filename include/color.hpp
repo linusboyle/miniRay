@@ -20,8 +20,12 @@ class RGBColor {
 
 public:
   RGBColor(int r, int g, int b) : rgb_(r / 255.0, g / 255.0, b / 255.0) {}
-  RGBColor(double r, double g, double b) : rgb_(r, g, b) {}
+  RGBColor(coordinate_type r, coordinate_type g, coordinate_type b) : rgb_(r, g, b) {}
   RGBColor(Vector3 color) : rgb_(color) {}
+
+  coordinate_type maxc() const {
+      return std::max(rgb_(0), std::max(rgb_(1), rgb_(2)));
+  }
 
   unsigned char r() const { return transform(rgb_(0)); }
   unsigned char g() const { return transform(rgb_(1)); }
