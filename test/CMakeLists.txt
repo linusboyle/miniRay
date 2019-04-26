@@ -1,8 +1,6 @@
-aux_source_directory(. TEST_SOURCE)
+add_executable(main main.cpp)
+target_compile_features(main PRIVATE cxx_std_17)
+target_link_libraries(main gomp)
+target_link_libraries(main graphics)
 
-add_executable(rt_test ${TEST_SOURCE}) 
-
-target_compile_features(rt_test PRIVATE cxx_std_17)
-target_link_libraries(rt_test graphics)
-target_link_libraries(rt_test stdc++fs)
-target_link_libraries(rt_test gomp)
+add_subdirectory(unit EXCLUDE_FROM_ALL)

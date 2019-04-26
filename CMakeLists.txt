@@ -14,7 +14,7 @@ include_directories(include ${PROJECT_BINARY_DIR})
 add_compile_options(-Wall -Wextra -g -fopenmp)
 
 add_subdirectory(src)
-add_subdirectory(test EXCLUDE_FROM_ALL)
+add_subdirectory(test)
 
 enable_testing()
 add_test(NAME buildtest COMMAND "${CMAKE_COMMAND}" --build ${CMAKE_BINARY_DIR} --target rt_test)
